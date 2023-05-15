@@ -11,7 +11,7 @@
         <!--Onboarding View Controller-->
         <scene sceneID="m66-v5-RJU">
             <objects>
-                <viewController storyboardIdentifier="OnboardingViewController" id="qdR-sG-hoR" customClass="OnboardingViewController" customModule="RoomPlanExampleApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OnboardingViewController" id="qdR-sG-hoR" customClass="OnboardingViewController" customModule="RoomPlanSimple" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yBf-P1-2uZ">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -67,7 +67,7 @@ You can see a preview of your scan at the bottom of the screen so you can make s
         <!--Room Capture View Controller-->
         <scene sceneID="aNf-ca-iLV">
             <objects>
-                <viewController storyboardIdentifier="RoomCaptureViewController" id="ocJ-nv-BaW" customClass="RoomCaptureViewController" customModule="RoomPlanExampleApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RoomCaptureViewController" id="ocJ-nv-BaW" customClass="RoomCaptureViewController" customModule="RoomPlanSimple" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nWS-xs-VtG">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
