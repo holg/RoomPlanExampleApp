@@ -6,21 +6,9 @@
 	objectVersion = 56;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		2120646B2A122F6C00F2A570 /* RoomPlanSimpleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2120646A2A122F6C00F2A570 /* RoomPlanSimpleApp.swift */; };
-		2120646D2A122F6C00F2A570 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2120646C2A122F6C00F2A570 /* ContentView.swift */; };
-		2120646F2A122F6D00F2A570 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2120646E2A122F6D00F2A570 /* Assets.xcassets */; };
-		212064732A122F6D00F2A570 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 212064722A122F6D00F2A570 /* Preview Assets.xcassets */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		05C7567A6B268FC70FFB0FCC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		212064682A122F6C00F2A570 /* RoomPlanSimple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoomPlanSimple.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2120646A2A122F6C00F2A570 /* RoomPlanSimpleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPlanSimpleApp.swift; sourceTree = "<group>"; };
-		2120646C2A122F6C00F2A570 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		2120646E2A122F6D00F2A570 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		212064702A122F6D00F2A570 /* RoomPlanSimple.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RoomPlanSimple.entitlements; sourceTree = "<group>"; };
-		212064722A122F6D00F2A570 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		35A95C3C90A8D7FA01AA694A /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 		71B6638428D0CABC00635A15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/UnsupportedDevice.storyboard; sourceTree = "<group>"; };
 		ACEF94B02820AD2300776A9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,32 +41,11 @@
 			name = Configuration;
 			sourceTree = "<group>";
 		};
-		212064692A122F6C00F2A570 /* RoomPlanSimple */ = {
-			isa = PBXGroup;
-			children = (
-				2120646A2A122F6C00F2A570 /* RoomPlanSimpleApp.swift */,
-				2120646C2A122F6C00F2A570 /* ContentView.swift */,
-				2120646E2A122F6D00F2A570 /* Assets.xcassets */,
-				212064702A122F6D00F2A570 /* RoomPlanSimple.entitlements */,
-				212064712A122F6D00F2A570 /* Preview Content */,
-			);
-			path = RoomPlanSimple;
-			sourceTree = "<group>";
-		};
-		212064712A122F6D00F2A570 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				212064722A122F6D00F2A570 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 		ACEF94A42820AD2300776A9D = {
 			isa = PBXGroup;
 			children = (
 				05C7567A6B268FC70FFB0FCC /* README.md */,
 				ACEF94AF2820AD2300776A9D /* RoomPlanSimple */,
-				212064692A122F6C00F2A570 /* RoomPlanSimple */,
 				ACEF94AE2820AD2300776A9D /* Products */,
 				0ED4ADFE8897242ABECFB073 /* Configuration */,
 				C4CB873CC14D1C6A55335C8A /* LICENSE */,
@@ -177,8 +144,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				212064732A122F6D00F2A570 /* Preview Assets.xcassets in Resources */,
-				2120646F2A122F6D00F2A570 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,8 +154,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2120646D2A122F6C00F2A570 /* ContentView.swift in Sources */,
-				2120646B2A122F6C00F2A570 /* RoomPlanSimpleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,12 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>RoomPlanExampleApp copy.xcscheme_^#shared#^_</key>
+		<key>RoomPlanSimple copy.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
-		<key>RoomPlanExampleApp.xcscheme_^#shared#^_</key>
+		<key>RoomPlanSimple.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -17,7 +17,7 @@
 		<key>RoomPlanSimple.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 	</dict>
 </dict>
