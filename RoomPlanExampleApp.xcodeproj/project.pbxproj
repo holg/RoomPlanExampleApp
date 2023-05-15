@@ -344,7 +344,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "eu.trahe.samplecode.RoomPlanExampleApp--SAMPLE-CODE-DISAMBIGUATOR-";
+				PRODUCT_BUNDLE_IDENTIFIER = eu.trahe.samplecode.RoomPlanSimple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -377,7 +377,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "eu.trahe.samplecode.RoomPlanExampleApp--SAMPLE-CODE-DISAMBIGUATOR-";
+				PRODUCT_BUNDLE_IDENTIFIER = eu.trahe.samplecode.RoomPlanSimple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
