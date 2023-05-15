@@ -7,27 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2120646B2A122F6C00F2A570 /* RoomPlanSimpleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2120646A2A122F6C00F2A570 /* RoomPlanSimpleApp.swift */; };
-		2120646D2A122F6C00F2A570 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2120646C2A122F6C00F2A570 /* ContentView.swift */; };
-		2120646F2A122F6D00F2A570 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2120646E2A122F6D00F2A570 /* Assets.xcassets */; };
-		212064732A122F6D00F2A570 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 212064722A122F6D00F2A570 /* Preview Assets.xcassets */; };
+		2120647A2A123D8400F2A570 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 212064792A123D8400F2A570 /* Preview Assets.xcassets */; };
+		21650D8E2A124A0E00D76BCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21650D8D2A124A0E00D76BCF /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		05C7567A6B268FC70FFB0FCC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		212064682A122F6C00F2A570 /* RoomPlanSimple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoomPlanSimple.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2120646A2A122F6C00F2A570 /* RoomPlanSimpleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPlanSimpleApp.swift; sourceTree = "<group>"; };
-		2120646C2A122F6C00F2A570 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		2120646E2A122F6D00F2A570 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		212064702A122F6D00F2A570 /* RoomPlanSimple.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RoomPlanSimple.entitlements; sourceTree = "<group>"; };
-		212064722A122F6D00F2A570 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		212064792A123D8400F2A570 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Preview Assets.xcassets"; path = "../../../../../.Trash/Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2120647C2A123DA500F2A570 /* RoomPlanSimple.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RoomPlanSimple.entitlements; sourceTree = "<group>"; };
+		21650D8D2A124A0E00D76BCF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35A95C3C90A8D7FA01AA694A /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 		71B6638428D0CABC00635A15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/UnsupportedDevice.storyboard; sourceTree = "<group>"; };
 		ACEF94B02820AD2300776A9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACEF94B22820AD2300776A9D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		ACEF94B42820AD2300776A9D /* RoomCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCaptureViewController.swift; sourceTree = "<group>"; };
 		ACEF94B72820AD2300776A9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		ACEF94B92820AD2400776A9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ACEF94BC2820AD2400776A9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ACEF94BE2820AD2400776A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
@@ -53,32 +48,11 @@
 			name = Configuration;
 			sourceTree = "<group>";
 		};
-		212064692A122F6C00F2A570 /* RoomPlanSimple */ = {
-			isa = PBXGroup;
-			children = (
-				2120646A2A122F6C00F2A570 /* RoomPlanSimpleApp.swift */,
-				2120646C2A122F6C00F2A570 /* ContentView.swift */,
-				2120646E2A122F6D00F2A570 /* Assets.xcassets */,
-				212064702A122F6D00F2A570 /* RoomPlanSimple.entitlements */,
-				212064712A122F6D00F2A570 /* Preview Content */,
-			);
-			path = RoomPlanSimple;
-			sourceTree = "<group>";
-		};
-		212064712A122F6D00F2A570 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				212064722A122F6D00F2A570 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 		ACEF94A42820AD2300776A9D = {
 			isa = PBXGroup;
 			children = (
 				05C7567A6B268FC70FFB0FCC /* README.md */,
 				ACEF94AF2820AD2300776A9D /* RoomPlanSimple */,
-				212064692A122F6C00F2A570 /* RoomPlanSimple */,
 				ACEF94AE2820AD2300776A9D /* Products */,
 				0ED4ADFE8897242ABECFB073 /* Configuration */,
 				C4CB873CC14D1C6A55335C8A /* LICENSE */,
@@ -96,13 +70,15 @@
 		ACEF94AF2820AD2300776A9D /* RoomPlanSimple */ = {
 			isa = PBXGroup;
 			children = (
+				21650D8D2A124A0E00D76BCF /* Assets.xcassets */,
+				2120647C2A123DA500F2A570 /* RoomPlanSimple.entitlements */,
+				212064792A123D8400F2A570 /* Preview Assets.xcassets */,
 				ACEF94B02820AD2300776A9D /* AppDelegate.swift */,
 				ACEF94B22820AD2300776A9D /* SceneDelegate.swift */,
 				ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */,
 				ACEF94B42820AD2300776A9D /* RoomCaptureViewController.swift */,
 				ACEF94B62820AD2300776A9D /* Main.storyboard */,
 				71B6638328D0CABC00635A15 /* UnsupportedDevice.storyboard */,
-				ACEF94B92820AD2400776A9D /* Assets.xcassets */,
 				ACEF94BB2820AD2400776A9D /* LaunchScreen.storyboard */,
 				ACEF94BE2820AD2400776A9D /* Info.plist */,
 			);
@@ -146,7 +122,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				DefaultBuildSystemTypeForWorkspace = Latest;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = Apple;
 				TargetAttributes = {
 					212064672A122F6C00F2A570 = {
@@ -177,8 +153,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				212064732A122F6D00F2A570 /* Preview Assets.xcassets in Resources */,
-				2120646F2A122F6D00F2A570 /* Assets.xcassets in Resources */,
+				21650D8E2A124A0E00D76BCF /* Assets.xcassets in Resources */,
+				2120647A2A123D8400F2A570 /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,8 +165,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2120646D2A122F6C00F2A570 /* ContentView.swift in Sources */,
-				2120646B2A122F6C00F2A570 /* RoomPlanSimpleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +208,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"RoomPlanSimple/Preview Content\"";
 				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -249,8 +224,7 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -258,7 +232,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
+				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -277,6 +251,7 @@
 				CODE_SIGN_ENTITLEMENTS = RoomPlanSimple/RoomPlanSimple.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"RoomPlanSimple/Preview Content\"";
 				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -292,8 +267,7 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -301,7 +275,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
+				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
