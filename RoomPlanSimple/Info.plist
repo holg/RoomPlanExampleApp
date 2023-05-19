@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to your camera to provide augmented reality features, such as overlaying digital information onto the real world. Your camera images are only used for this purpose and are not stored or shared</string>
+	<string>This app requires access to your camera to use the LiDAR scanner. This is used to create a model of your room for planning purposes. Your camera images and LiDAR data are only used for this purpose and are not stored or shared.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
