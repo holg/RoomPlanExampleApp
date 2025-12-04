@@ -34,6 +34,12 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     // Status UI
     private var statusLabel: UILabel?
 
+    // Export manager (Issue #14 refactoring)
+    private lazy var exportManager = RoomExportManager(
+        presentingViewController: self,
+        sourceView: exportButton
+    )
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -130,13 +136,13 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         isScanning = true
         captureError = nil
         roomCaptureView?.captureSession.run(configuration: roomCaptureSessionConfig)
-        setActiveNavBar()
+        updateNavBar(isScanning: true)
     }
 
     private func stopSession() {
         isScanning = false
         roomCaptureView?.captureSession.stop()
-        setCompleteNavBar()
+        updateNavBar(isScanning: false)
     }
 
     // MARK: - RoomCaptureViewDelegate
@@ -230,40 +236,21 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
             return
         }
 
-        showExportOptions { [weak self] format in
-            self?.performExport(results: results, format: format)
-        }
-    }
-
-    // MARK: - Export
-
-    private func showExportOptions(completion: @escaping (ExportFormat) -> Void) {
-        let alert = UIAlertController(
-            title: AppConstants.Strings.exportTitle,
-            message: "Detected: \(scanStatistics.summary)\n\n\(AppConstants.Strings.exportMessage)",
-            preferredStyle: .actionSheet
+        exportManager.showExportOptions(
+            statistics: scanStatistics,
+            onFloorPlan: { [weak self] in self?.showFloorPlan() },
+            onExport: { [weak self] format in
+                guard let self = self else { return }
+                self.exportManager.performExport(
+                    results: results,
+                    format: format,
+                    onError: { self.showError($0) }
+                )
+            }
         )
-
-        // View Floor Plan option
-        alert.addAction(UIAlertAction(title: "View Floor Plan", style: .default) { [weak self] _ in
-            self?.showFloorPlan()
-        })
-
-        for format in ExportFormat.allCases {
-            alert.addAction(UIAlertAction(title: format.rawValue, style: .default) { _ in
-                completion(format)
-            })
-        }
-
-        alert.addAction(UIAlertAction(title: AppConstants.Strings.cancelButton, style: .cancel))
-
-        if let popover = alert.popoverPresentationController {
-            popover.sourceView = exportButton
-            popover.sourceRect = exportButton?.bounds ?? .zero
-        }
-
-        present(alert, animated: true)
     }
+
+    // MARK: - Floor Plan
 
     private func showFloorPlan() {
         guard let room = finalResults else {
@@ -277,90 +264,34 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         present(navController, animated: true)
     }
 
-    private func performExport(results: CapturedRoom, format: ExportFormat) {
-        let fileName = "\(AppConstants.Export.filePrefix)_\(formatDate(Date())).\(format.fileExtension)"
-        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-
-        // Clean up any existing file
-        try? FileManager.default.removeItem(at: destinationURL)
-
-        do {
-            try results.export(to: destinationURL, exportOptions: format.exportOption)
-            presentShareSheet(for: destinationURL)
-        } catch {
-            showError(RoomCaptureError.exportFailed(underlying: error))
-        }
-    }
-
-    private func presentShareSheet(for url: URL) {
-        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        activityVC.modalPresentationStyle = .popover
-
-        if let popover = activityVC.popoverPresentationController {
-            popover.sourceView = exportButton
-            popover.sourceRect = exportButton?.bounds ?? .zero
-        }
-
-        activityVC.completionWithItemsHandler = { [weak self] _, _, _, error in
-            if let error = error {
-                self?.showError(RoomCaptureError.exportFailed(underlying: error))
-            }
-        }
-
-        present(activityVC, animated: true)
-    }
-
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = AppConstants.Export.dateFormat
-        return formatter.string(from: date)
-    }
-
     // MARK: - Error Handling
 
     private func showError(_ error: RoomCaptureError) {
-        let alert = UIAlertController(
-            title: AppConstants.Strings.errorTitle,
-            message: error.errorDescription,
-            preferredStyle: .alert
-        )
+        let message = [error.errorDescription, error.recoverySuggestion]
+            .compactMap { $0 }
+            .joined(separator: "\n\n")
 
-        if let suggestion = error.recoverySuggestion {
-            alert.message = "\(error.errorDescription ?? "")\n\n\(suggestion)"
-        }
-
+        let alert = UIAlertController(title: AppConstants.Strings.errorTitle, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: AppConstants.Strings.okButton, style: .default))
 
-        // Add retry action for export errors
         if case .exportFailed = error {
             alert.addAction(UIAlertAction(title: AppConstants.Strings.tryAgainButton, style: .default) { [weak self] _ in
-                if let button = self?.exportButton {
-                    self?.exportResults(button)
-                }
+                if let button = self?.exportButton { self?.exportResults(button) }
             })
         }
-
         present(alert, animated: true)
     }
 
     // MARK: - UI State Management
 
-    private func setActiveNavBar() {
-        UIView.animate(withDuration: AppConstants.UI.animationDuration, animations: { [weak self] in
-            self?.cancelButton?.tintColor = AppConstants.Colors.activeNavBarTint
-            self?.doneButton?.tintColor = AppConstants.Colors.activeNavBarTint
-            self?.exportButton?.alpha = 0.0
-        }, completion: { [weak self] _ in
-            self?.exportButton?.isHidden = true
-        })
-    }
+    private func updateNavBar(isScanning: Bool) {
+        let tintColor = isScanning ? AppConstants.Colors.activeNavBarTint : AppConstants.Colors.completeNavBarTint
+        exportButton?.isHidden = isScanning
 
-    private func setCompleteNavBar() {
-        exportButton?.isHidden = false
         UIView.animate(withDuration: AppConstants.UI.animationDuration) { [weak self] in
-            self?.cancelButton?.tintColor = AppConstants.Colors.completeNavBarTint
-            self?.doneButton?.tintColor = AppConstants.Colors.completeNavBarTint
-            self?.exportButton?.alpha = 1.0
+            self?.cancelButton?.tintColor = tintColor
+            self?.doneButton?.tintColor = tintColor
+            self?.exportButton?.alpha = isScanning ? 0.0 : 1.0
         }
     }
 }
