@@ -49,7 +49,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         HapticFeedbackManager.shared.prepareGenerators()
 
         #if DEBUG
-        MemoryMonitor.shared.startMonitoring(interval: 10.0)
+        // Only log on significant events, not continuously (reduces debug slowdown)
         MemoryMonitor.shared.checkpoint("RoomCaptureViewController loaded")
         #endif
     }
@@ -113,7 +113,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     deinit {
         #if DEBUG
         Task { @MainActor in
-            MemoryMonitor.shared.stopMonitoring()
+            MemoryMonitor.shared.checkpoint("RoomCaptureViewController deinit")
             _ = MemoryMonitor.shared.checkForLeaks(threshold: 20_000_000)
         }
         print("RoomCaptureViewController deallocated")
@@ -248,6 +248,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         exportManager.showExportOptions(
             statistics: scanStatistics,
             onFloorPlan: { [weak self] in self?.showFloorPlan() },
+            onSave: { [weak self] in self?.saveRoom(results) },
             onExport: { [weak self] format in
                 guard let self = self else { return }
                 self.exportManager.performExport(
@@ -257,6 +258,28 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
                 )
             }
         )
+    }
+
+    // MARK: - Save Room
+
+    private func saveRoom(_ room: CapturedRoom) {
+        do {
+            let savedRoom = try RoomStorageManager.shared.saveRoom(room)
+            showSaveSuccess(savedRoom)
+            HapticFeedbackManager.shared.scanComplete()
+        } catch {
+            showError(RoomCaptureError.exportFailed(underlying: error))
+        }
+    }
+
+    private func showSaveSuccess(_ savedRoom: SavedRoom) {
+        let alert = UIAlertController(
+            title: "Room Saved",
+            message: "\"\(savedRoom.name)\" saved successfully.\n\n\(savedRoom.summary)",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: AppConstants.Strings.okButton, style: .default))
+        present(alert, animated: true)
     }
 
     // MARK: - Floor Plan

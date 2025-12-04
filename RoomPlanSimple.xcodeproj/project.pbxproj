@@ -23,6 +23,8 @@
 		CC000001DEADBEEF00000006 /* FloorPlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000006 /* FloorPlanViewController.swift */; };
 		CC000001DEADBEEF00000007 /* RoomExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000007 /* RoomExportManager.swift */; };
 		CC000001DEADBEEF00000008 /* MemoryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000008 /* MemoryMonitor.swift */; };
+		CC000001DEADBEEF00000009 /* RoomStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000009 /* RoomStorageManager.swift */; };
+		CC000001DEADBEEF0000000A /* SavedRoomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000A /* SavedRoomsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,8 @@
 		CC000002DEADBEEF00000006 /* FloorPlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanViewController.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000007 /* RoomExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomExportManager.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000008 /* MemoryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryMonitor.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000009 /* RoomStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStorageManager.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000000A /* SavedRoomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedRoomsViewController.swift; sourceTree = "<group>"; };
 		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,6 +148,8 @@
 				CC000002DEADBEEF00000006 /* FloorPlanViewController.swift */,
 				CC000002DEADBEEF00000007 /* RoomExportManager.swift */,
 				CC000002DEADBEEF00000008 /* MemoryMonitor.swift */,
+				CC000002DEADBEEF00000009 /* RoomStorageManager.swift */,
+				CC000002DEADBEEF0000000A /* SavedRoomsViewController.swift */,
 				ACEF94B62820AD2300776A9D /* Main.storyboard */,
 				71B6638328D0CABC00635A15 /* UnsupportedDevice.storyboard */,
 				ACEF94B92820AD2400776A9D /* Assets.xcassets */,
@@ -330,6 +336,8 @@
 				CC000001DEADBEEF00000006 /* FloorPlanViewController.swift in Sources */,
 				CC000001DEADBEEF00000007 /* RoomExportManager.swift in Sources */,
 				CC000001DEADBEEF00000008 /* MemoryMonitor.swift in Sources */,
+				CC000001DEADBEEF00000009 /* RoomStorageManager.swift in Sources */,
+				CC000001DEADBEEF0000000A /* SavedRoomsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,7 +397,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimpleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -416,7 +424,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimpleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -443,7 +451,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimpleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -471,7 +479,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimpleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -622,7 +630,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -655,7 +663,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

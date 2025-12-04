@@ -30,6 +30,7 @@ final class RoomExportManager {
     func showExportOptions(
         statistics: ScanStatistics,
         onFloorPlan: @escaping () -> Void,
+        onSave: @escaping () -> Void,
         onExport: @escaping (ExportFormat) -> Void
     ) {
         let alert = UIAlertController(
@@ -37,6 +38,11 @@ final class RoomExportManager {
             message: "Detected: \(statistics.summary)\n\n\(AppConstants.Strings.exportMessage)",
             preferredStyle: .actionSheet
         )
+
+        // Save Room option
+        alert.addAction(UIAlertAction(title: "Save Room", style: .default) { _ in
+            onSave()
+        })
 
         // View Floor Plan option
         alert.addAction(UIAlertAction(title: "View Floor Plan", style: .default) { _ in

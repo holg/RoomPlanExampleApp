@@ -126,9 +126,9 @@ class FloorPlanViewController: UIViewController {
 
         floorPlanView.configure(with: room)
 
-        // Update stats
+        // Update stats with detailed measurements
         let stats = ScanStatistics.from(room)
-        statsLabel.text = "Detected: \(stats.summary)"
+        statsLabel.text = stats.detailedSummary
     }
 
     // MARK: - Actions

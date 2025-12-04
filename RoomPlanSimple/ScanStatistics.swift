@@ -17,6 +17,15 @@ struct ScanStatistics: Sendable {
     var openingCount: Int = 0
     var floorArea: Float = 0
 
+    // Room dimensions
+    var roomWidth: Float = 0
+    var roomHeight: Float = 0
+    var roomDepth: Float = 0
+
+    // Calculated values
+    var wallArea: Float = 0
+    var volume: Float = 0
+
     var totalElements: Int {
         wallCount + doorCount + windowCount + objectCount + openingCount
     }
@@ -31,6 +40,38 @@ struct ScanStatistics: Sendable {
         return parts.isEmpty ? AppConstants.Strings.noElementsDetected : parts.joined(separator: ", ")
     }
 
+    var detailedSummary: String {
+        var lines: [String] = []
+
+        // Dimensions
+        if roomWidth > 0 && roomDepth > 0 {
+            lines.append(String(format: "Dimensions: %.2f × %.2f m", roomWidth, roomDepth))
+        }
+        if roomHeight > 0 {
+            lines.append(String(format: "Ceiling Height: %.2f m", roomHeight))
+        }
+
+        // Areas
+        if floorArea > 0 {
+            lines.append(String(format: "Floor Area: %.2f m² (%.0f sq ft)", floorArea, floorArea * 10.764))
+        }
+        if wallArea > 0 {
+            lines.append(String(format: "Wall Area: %.2f m²", wallArea))
+        }
+        if volume > 0 {
+            lines.append(String(format: "Volume: %.2f m³", volume))
+        }
+
+        // Elements
+        lines.append("")
+        lines.append("Elements: \(wallCount) walls, \(doorCount) doors, \(windowCount) windows")
+        if objectCount > 0 {
+            lines.append("Furniture: \(objectCount) object\(objectCount == 1 ? "" : "s")")
+        }
+
+        return lines.joined(separator: "\n")
+    }
+
     static func from(_ room: CapturedRoom) -> ScanStatistics {
         var stats = ScanStatistics()
         stats.wallCount = room.walls.count
@@ -38,7 +79,18 @@ struct ScanStatistics: Sendable {
         stats.windowCount = room.windows.count
         stats.openingCount = room.openings.count
         stats.objectCount = room.objects.count
+
+        // Get dimensions
+        let bbox = RoomGeometry.getBoundingBox(from: room)
+        stats.roomWidth = bbox.width
+        stats.roomHeight = bbox.height
+        stats.roomDepth = bbox.depth
+
+        // Calculate areas
         stats.floorArea = RoomGeometry.calculateApproximateFloorArea(from: room)
+        stats.wallArea = RoomGeometry.calculateWallArea(from: room)
+        stats.volume = stats.floorArea * stats.roomHeight
+
         return stats
     }
 }
@@ -117,5 +169,29 @@ enum RoomGeometry {
         }
 
         return sum / Float(room.walls.count)
+    }
+
+    /// Calculate total wall surface area
+    static func calculateWallArea(from room: CapturedRoom) -> Float {
+        var totalArea: Float = 0
+
+        for wall in room.walls {
+            // Wall area = width * height (x and y dimensions)
+            let area = wall.dimensions.x * wall.dimensions.y
+            totalArea += area
+        }
+
+        return totalArea
+    }
+
+    /// Get perimeter of room (sum of wall lengths)
+    static func calculatePerimeter(from room: CapturedRoom) -> Float {
+        var perimeter: Float = 0
+
+        for wall in room.walls {
+            perimeter += wall.dimensions.x
+        }
+
+        return perimeter
     }
 }
