@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,9 +21,28 @@
 		CC000001DEADBEEF00000004 /* RoomCaptureError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000004 /* RoomCaptureError.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		21B841992EE1FF7B00502C5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ACEF94A52820AD2300776A9D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ACEF94AC2820AD2300776A9D;
+			remoteInfo = RoomPlanSimple;
+		};
+		21B841AA2EE200CA00502C5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ACEF94A52820AD2300776A9D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ACEF94AC2820AD2300776A9D;
+			remoteInfo = RoomPlanSimple;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		05C7567A6B268FC70FFB0FCC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		213F69B12A128836000BE6B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		21B841932EE1FF7B00502C5E /* RoomPlanSimpleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoomPlanSimpleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		21B841A62EE200CA00502C5E /* RoomPlanSimpleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoomPlanSimpleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35A95C3C90A8D7FA01AA694A /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 		71B6638428D0CABC00635A15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/UnsupportedDevice.storyboard; sourceTree = "<group>"; };
 		ACEF94AD2820AD2300776A9D /* RoomPlanSimple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoomPlanSimple.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,14 +53,33 @@
 		ACEF94B92820AD2400776A9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ACEF94BE2820AD2400776A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
-		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000001 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000002 /* HapticFeedbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackManager.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000003 /* ScanStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanStatistics.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000004 /* RoomCaptureError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCaptureError.swift; sourceTree = "<group>"; };
+		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		21B841942EE1FF7B00502C5E /* RoomPlanSimpleUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = RoomPlanSimpleUITests; sourceTree = "<group>"; };
+		21B841A72EE200CA00502C5E /* RoomPlanSimpleTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = RoomPlanSimpleTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		21B841902EE1FF7B00502C5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		21B841A32EE200CA00502C5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ACEF94AA2820AD2300776A9D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -65,6 +103,8 @@
 			children = (
 				05C7567A6B268FC70FFB0FCC /* README.md */,
 				ACEF94AF2820AD2300776A9D /* RoomPlanSimple */,
+				21B841942EE1FF7B00502C5E /* RoomPlanSimpleUITests */,
+				21B841A72EE200CA00502C5E /* RoomPlanSimpleTests */,
 				ACEF94AE2820AD2300776A9D /* Products */,
 				0ED4ADFE8897242ABECFB073 /* Configuration */,
 				C4CB873CC14D1C6A55335C8A /* LICENSE */,
@@ -75,6 +115,8 @@
 			isa = PBXGroup;
 			children = (
 				ACEF94AD2820AD2300776A9D /* RoomPlanSimple.app */,
+				21B841932EE1FF7B00502C5E /* RoomPlanSimpleUITests.xctest */,
+				21B841A62EE200CA00502C5E /* RoomPlanSimpleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,6 +152,52 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		21B841922EE1FF7B00502C5E /* RoomPlanSimpleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 21B8419D2EE1FF7B00502C5E /* Build configuration list for PBXNativeTarget "RoomPlanSimpleUITests" */;
+			buildPhases = (
+				21B8418F2EE1FF7B00502C5E /* Sources */,
+				21B841902EE1FF7B00502C5E /* Frameworks */,
+				21B841912EE1FF7B00502C5E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				21B8419A2EE1FF7B00502C5E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				21B841942EE1FF7B00502C5E /* RoomPlanSimpleUITests */,
+			);
+			name = RoomPlanSimpleUITests;
+			packageProductDependencies = (
+			);
+			productName = RoomPlanSimpleUITests;
+			productReference = 21B841932EE1FF7B00502C5E /* RoomPlanSimpleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		21B841A52EE200CA00502C5E /* RoomPlanSimpleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 21B841AC2EE200CA00502C5E /* Build configuration list for PBXNativeTarget "RoomPlanSimpleTests" */;
+			buildPhases = (
+				21B841A22EE200CA00502C5E /* Sources */,
+				21B841A32EE200CA00502C5E /* Frameworks */,
+				21B841A42EE200CA00502C5E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				21B841AB2EE200CA00502C5E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				21B841A72EE200CA00502C5E /* RoomPlanSimpleTests */,
+			);
+			name = RoomPlanSimpleTests;
+			packageProductDependencies = (
+			);
+			productName = RoomPlanSimpleTests;
+			productReference = 21B841A62EE200CA00502C5E /* RoomPlanSimpleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		ACEF94AC2820AD2300776A9D /* RoomPlanSimple */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = ACEF94C12820AD2400776A9D /* Build configuration list for PBXNativeTarget "RoomPlanSimple" */;
@@ -134,10 +222,18 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1400;
+				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = Apple;
 				TargetAttributes = {
+					21B841922EE1FF7B00502C5E = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = ACEF94AC2820AD2300776A9D;
+					};
+					21B841A52EE200CA00502C5E = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = ACEF94AC2820AD2300776A9D;
+					};
 					ACEF94AC2820AD2300776A9D = {
 						CreatedOnToolsVersion = 14.0;
 					};
@@ -157,11 +253,27 @@
 			projectRoot = "";
 			targets = (
 				ACEF94AC2820AD2300776A9D /* RoomPlanSimple */,
+				21B841922EE1FF7B00502C5E /* RoomPlanSimpleUITests */,
+				21B841A52EE200CA00502C5E /* RoomPlanSimpleTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		21B841912EE1FF7B00502C5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		21B841A42EE200CA00502C5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ACEF94AB2820AD2300776A9D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -176,6 +288,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		21B8418F2EE1FF7B00502C5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		21B841A22EE200CA00502C5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ACEF94A92820AD2300776A9D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -192,6 +318,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		21B8419A2EE1FF7B00502C5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ACEF94AC2820AD2300776A9D /* RoomPlanSimple */;
+			targetProxy = 21B841992EE1FF7B00502C5E /* PBXContainerItemProxy */;
+		};
+		21B841AB2EE200CA00502C5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ACEF94AC2820AD2300776A9D /* RoomPlanSimple */;
+			targetProxy = 21B841AA2EE200CA00502C5E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		213F69B02A128836000BE6B0 /* LaunchScreen.storyboard */ = {
@@ -221,6 +360,114 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		21B8419B2EE1FF7B00502C5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U4GT5CZ7J7;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimpleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = RoomPlanSimple;
+			};
+			name = Debug;
+		};
+		21B8419C2EE1FF7B00502C5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U4GT5CZ7J7;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimpleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = RoomPlanSimple;
+			};
+			name = Release;
+		};
+		21B841AD2EE200CA00502C5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U4GT5CZ7J7;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimpleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RoomPlanSimple.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RoomPlanSimple";
+			};
+			name = Debug;
+		};
+		21B841AE2EE200CA00502C5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U4GT5CZ7J7;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = trahe.eu.RoomPlanSimpleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RoomPlanSimple.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RoomPlanSimple";
+			};
+			name = Release;
+		};
 		ACEF94BF2820AD2400776A9D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -354,6 +601,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -386,6 +634,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -404,6 +653,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		21B8419D2EE1FF7B00502C5E /* Build configuration list for PBXNativeTarget "RoomPlanSimpleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21B8419B2EE1FF7B00502C5E /* Debug */,
+				21B8419C2EE1FF7B00502C5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		21B841AC2EE200CA00502C5E /* Build configuration list for PBXNativeTarget "RoomPlanSimpleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21B841AD2EE200CA00502C5E /* Debug */,
+				21B841AE2EE200CA00502C5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		ACEF94A82820AD2300776A9D /* Build configuration list for PBXProject "RoomPlanSimple" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
