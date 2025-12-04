@@ -15,6 +15,10 @@
 		ACEF94B82820AD2300776A9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACEF94B62820AD2300776A9D /* Main.storyboard */; };
 		ACEF94BA2820AD2400776A9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACEF94B92820AD2400776A9D /* Assets.xcassets */; };
 		ACEF94C62820AF6600776A9D /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */; };
+		CC000001DEADBEEF00000001 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000001 /* Constants.swift */; };
+		CC000001DEADBEEF00000002 /* HapticFeedbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000002 /* HapticFeedbackManager.swift */; };
+		CC000001DEADBEEF00000003 /* ScanStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000003 /* ScanStatistics.swift */; };
+		CC000001DEADBEEF00000004 /* RoomCaptureError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000004 /* RoomCaptureError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +35,10 @@
 		ACEF94BE2820AD2400776A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000001 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000002 /* HapticFeedbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackManager.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000003 /* ScanStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanStatistics.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000004 /* RoomCaptureError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCaptureError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +84,10 @@
 			children = (
 				ACEF94B02820AD2300776A9D /* AppDelegate.swift */,
 				ACEF94B22820AD2300776A9D /* SceneDelegate.swift */,
+				CC000002DEADBEEF00000001 /* Constants.swift */,
+				CC000002DEADBEEF00000004 /* RoomCaptureError.swift */,
+				CC000002DEADBEEF00000002 /* HapticFeedbackManager.swift */,
+				CC000002DEADBEEF00000003 /* ScanStatistics.swift */,
 				ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */,
 				ACEF94B42820AD2300776A9D /* RoomCaptureViewController.swift */,
 				ACEF94B62820AD2300776A9D /* Main.storyboard */,
@@ -172,6 +184,10 @@
 				ACEF94B12820AD2300776A9D /* AppDelegate.swift in Sources */,
 				ACEF94B32820AD2300776A9D /* SceneDelegate.swift in Sources */,
 				ACEF94C62820AF6600776A9D /* OnboardingViewController.swift in Sources */,
+				CC000001DEADBEEF00000001 /* Constants.swift in Sources */,
+				CC000001DEADBEEF00000002 /* HapticFeedbackManager.swift in Sources */,
+				CC000001DEADBEEF00000003 /* ScanStatistics.swift in Sources */,
+				CC000001DEADBEEF00000004 /* RoomCaptureError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

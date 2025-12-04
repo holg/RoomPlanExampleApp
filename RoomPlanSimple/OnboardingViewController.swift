@@ -20,7 +20,7 @@ class OnboardingViewController: UIViewController {
     private func checkDeviceCapability() {
         if !RoomCaptureSession.isSupported {
             startScanButton?.isEnabled = false
-            startScanButton?.setTitle("Device Not Supported", for: .disabled)
+            startScanButton?.setTitle(AppConstants.Strings.deviceNotSupported, for: .disabled)
         }
     }
 
@@ -32,7 +32,7 @@ class OnboardingViewController: UIViewController {
 
         guard let viewController = storyboard?.instantiateViewController(
             withIdentifier: "RoomCaptureViewNavigationController") else {
-            showError(message: "Unable to start scanning. Please restart the app.")
+            showError(message: AppConstants.Strings.unableToStartScanning)
             return
         }
 
@@ -42,21 +42,21 @@ class OnboardingViewController: UIViewController {
 
     private func showUnsupportedDeviceAlert() {
         let alert = UIAlertController(
-            title: "Unsupported Device",
-            message: "This device doesn't have a LiDAR scanner. RoomPlan requires iPhone 12 Pro or later, or iPad Pro with LiDAR.",
+            title: AppConstants.Strings.unsupportedDeviceTitle,
+            message: AppConstants.Strings.unsupportedDeviceMessage,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: AppConstants.Strings.okButton, style: .default))
         present(alert, animated: true)
     }
 
     private func showError(message: String) {
         let alert = UIAlertController(
-            title: "Error",
+            title: AppConstants.Strings.errorTitle,
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: AppConstants.Strings.okButton, style: .default))
         present(alert, animated: true)
     }
 }

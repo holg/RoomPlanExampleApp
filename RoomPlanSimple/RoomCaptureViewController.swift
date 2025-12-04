@@ -8,64 +8,18 @@ The sample app's main view controller that manages the scanning process.
 import UIKit
 import RoomPlan
 
-// MARK: - Error Types (Issue #16)
-
-enum RoomCaptureError: LocalizedError {
-    case noScanData
-    case exportFailed(underlying: Error)
-    case sessionFailed(underlying: Error)
-    case processingFailed(underlying: Error)
-
-    var errorDescription: String? {
-        switch self {
-        case .noScanData:
-            return "No room scan data available"
-        case .exportFailed(let error):
-            return "Failed to export room: \(error.localizedDescription)"
-        case .sessionFailed(let error):
-            return "Scanning session failed: \(error.localizedDescription)"
-        case .processingFailed(let error):
-            return "Failed to process scan: \(error.localizedDescription)"
-        }
-    }
-
-    var recoverySuggestion: String? {
-        switch self {
-        case .noScanData:
-            return "Please complete a room scan before exporting."
-        case .exportFailed:
-            return "Try exporting again or use a different format."
-        case .sessionFailed:
-            return "Ensure you have adequate lighting and try again."
-        case .processingFailed:
-            return "Try scanning the room again with slower movements."
-        }
-    }
-}
-
-// MARK: - Export Options
-
-enum ExportFormat: String, CaseIterable {
-    case parametric = "Parametric (Furniture)"
-    case mesh = "3D Mesh"
-
-    var exportOption: CapturedRoom.USDExportOptions {
-        switch self {
-        case .parametric: return .parametric
-        case .mesh: return .mesh
-        }
-    }
-
-    var fileExtension: String { "usdz" }
-}
-
 // MARK: - RoomCaptureViewController
 
+@MainActor
 class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, RoomCaptureSessionDelegate {
+
+    // MARK: - IBOutlets
 
     @IBOutlet var exportButton: UIButton?
     @IBOutlet var doneButton: UIBarButtonItem?
     @IBOutlet var cancelButton: UIBarButtonItem?
+
+    // MARK: - Private Properties
 
     private var isScanning: Bool = false
     private var roomCaptureView: RoomCaptureView!
@@ -73,11 +27,20 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     private var finalResults: CapturedRoom?
     private var captureError: Error?
 
+    // Statistics tracking
+    private var scanStatistics = ScanStatistics()
+    private var lastObjectCount = 0
+
+    // Status UI
+    private var statusLabel: UILabel?
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupRoomCaptureView()
+        setupStatusLabel()
+        HapticFeedbackManager.shared.prepareGenerators()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -102,9 +65,51 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         view.insertSubview(roomCaptureView, at: 0)
     }
 
+    private func setupStatusLabel() {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: AppConstants.UI.statusLabelFontSize, weight: .medium)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.backgroundColor = AppConstants.Colors.overlayBackground
+        label.layer.cornerRadius = AppConstants.UI.cornerRadius
+        label.clipsToBounds = true
+        label.isHidden = true
+
+        view.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: AppConstants.UI.statusLabelTopOffset),
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.heightAnchor.constraint(greaterThanOrEqualToConstant: AppConstants.UI.statusLabelMinHeight)
+        ])
+
+        statusLabel = label
+    }
+
     private func cleanupResources() {
         finalResults = nil
         captureError = nil
+        scanStatistics = ScanStatistics()
+        lastObjectCount = 0
+    }
+
+    // MARK: - Status Label
+
+    private func updateStatusLabel(_ text: String, isError: Bool = false) {
+        statusLabel?.text = "  \(text)  "
+        statusLabel?.backgroundColor = isError
+            ? AppConstants.Colors.errorBackground
+            : AppConstants.Colors.overlayBackground
+        statusLabel?.isHidden = false
+    }
+
+    private func hideStatusLabel() {
+        UIView.animate(withDuration: AppConstants.UI.animationDuration) { [weak self] in
+            self?.statusLabel?.alpha = 0
+        } completion: { [weak self] _ in
+            self?.statusLabel?.isHidden = true
+            self?.statusLabel?.alpha = 1
+        }
     }
 
     // MARK: - Session Management
@@ -124,27 +129,72 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
     // MARK: - RoomCaptureViewDelegate
 
-    func captureView(shouldPresent roomDataForProcessing: CapturedRoomData, error: Error?) -> Bool {
+    nonisolated func captureView(shouldPresent roomDataForProcessing: CapturedRoomData, error: Error?) -> Bool {
         if let error = error {
-            captureError = error
+            Task { @MainActor in
+                self.captureError = error
+            }
         }
         return true
     }
 
-    func captureView(didPresent processedResult: CapturedRoom, error: Error?) {
-        if let error = error {
-            captureError = error
-            showError(RoomCaptureError.processingFailed(underlying: error))
+    nonisolated func captureView(didPresent processedResult: CapturedRoom, error: Error?) {
+        Task { @MainActor in
+            if let error = error {
+                self.captureError = error
+                self.showError(RoomCaptureError.processingFailed(underlying: error))
+                HapticFeedbackManager.shared.scanError()
+            } else {
+                HapticFeedbackManager.shared.scanComplete()
+            }
+            self.finalResults = processedResult
+            self.scanStatistics = ScanStatistics.from(processedResult)
         }
-        finalResults = processedResult
     }
 
     // MARK: - RoomCaptureSessionDelegate
 
-    func captureSession(_ session: RoomCaptureSession, didFailWithError error: Error) {
-        captureError = error
-        DispatchQueue.main.async { [weak self] in
-            self?.showError(RoomCaptureError.sessionFailed(underlying: error))
+    nonisolated func captureSession(_ session: RoomCaptureSession, didFailWithError error: Error) {
+        Task { @MainActor in
+            self.captureError = error
+            HapticFeedbackManager.shared.scanError()
+            self.showError(RoomCaptureError.sessionFailed(underlying: error))
+            self.updateStatusLabel(AppConstants.Strings.scanningFailed, isError: true)
+        }
+    }
+
+    nonisolated func captureSession(_ session: RoomCaptureSession, didUpdate room: CapturedRoom) {
+        let totalObjects = room.walls.count + room.doors.count + room.windows.count + room.objects.count
+        let stats = ScanStatistics.from(room)
+
+        Task { @MainActor in
+            // Haptic feedback when new objects detected
+            if totalObjects > self.lastObjectCount {
+                HapticFeedbackManager.shared.objectDetected()
+                self.lastObjectCount = totalObjects
+            }
+            self.scanStatistics = stats
+        }
+    }
+
+    nonisolated func captureSession(_ session: RoomCaptureSession, didStartWith configuration: RoomCaptureSession.Configuration) {
+        Task { @MainActor in
+            self.updateStatusLabel(AppConstants.Strings.scanningStarted)
+            try? await Task.sleep(nanoseconds: UInt64(AppConstants.UI.statusLabelAutoHideDelay * 1_000_000_000))
+            self.hideStatusLabel()
+        }
+    }
+
+    nonisolated func captureSession(_ session: RoomCaptureSession, didEndWith data: CapturedRoomData, error: Error?) {
+        Task { @MainActor in
+            if let error = error {
+                self.captureError = error
+                HapticFeedbackManager.shared.scanError()
+                self.updateStatusLabel(AppConstants.Strings.scanEndedWithError, isError: true)
+            } else {
+                HapticFeedbackManager.shared.scanComplete()
+                self.hideStatusLabel()
+            }
         }
     }
 
@@ -177,8 +227,8 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
     private func showExportOptions(completion: @escaping (ExportFormat) -> Void) {
         let alert = UIAlertController(
-            title: "Export Format",
-            message: "Choose how to export your room scan",
+            title: AppConstants.Strings.exportTitle,
+            message: "Detected: \(scanStatistics.summary)\n\n\(AppConstants.Strings.exportMessage)",
             preferredStyle: .actionSheet
         )
 
@@ -188,7 +238,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
             })
         }
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: AppConstants.Strings.cancelButton, style: .cancel))
 
         if let popover = alert.popoverPresentationController {
             popover.sourceView = exportButton
@@ -199,7 +249,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     }
 
     private func performExport(results: CapturedRoom, format: ExportFormat) {
-        let fileName = "Room_\(formatDate(Date())).\(format.fileExtension)"
+        let fileName = "\(AppConstants.Export.filePrefix)_\(formatDate(Date())).\(format.fileExtension)"
         let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 
         // Clean up any existing file
@@ -222,7 +272,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
             popover.sourceRect = exportButton?.bounds ?? .zero
         }
 
-        activityVC.completionWithItemsHandler = { [weak self] _, completed, _, error in
+        activityVC.completionWithItemsHandler = { [weak self] _, _, _, error in
             if let error = error {
                 self?.showError(RoomCaptureError.exportFailed(underlying: error))
             }
@@ -233,15 +283,15 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd_HHmmss"
+        formatter.dateFormat = AppConstants.Export.dateFormat
         return formatter.string(from: date)
     }
 
-    // MARK: - Error Handling (Issue #16)
+    // MARK: - Error Handling
 
     private func showError(_ error: RoomCaptureError) {
         let alert = UIAlertController(
-            title: "Error",
+            title: AppConstants.Strings.errorTitle,
             message: error.errorDescription,
             preferredStyle: .alert
         )
@@ -250,11 +300,11 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
             alert.message = "\(error.errorDescription ?? "")\n\n\(suggestion)"
         }
 
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: AppConstants.Strings.okButton, style: .default))
 
-        // Add retry action for certain errors
+        // Add retry action for export errors
         if case .exportFailed = error {
-            alert.addAction(UIAlertAction(title: "Try Again", style: .default) { [weak self] _ in
+            alert.addAction(UIAlertAction(title: AppConstants.Strings.tryAgainButton, style: .default) { [weak self] _ in
                 if let button = self?.exportButton {
                     self?.exportResults(button)
                 }
@@ -267,9 +317,9 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     // MARK: - UI State Management
 
     private func setActiveNavBar() {
-        UIView.animate(withDuration: 0.3, animations: { [weak self] in
-            self?.cancelButton?.tintColor = .white
-            self?.doneButton?.tintColor = .white
+        UIView.animate(withDuration: AppConstants.UI.animationDuration, animations: { [weak self] in
+            self?.cancelButton?.tintColor = AppConstants.Colors.activeNavBarTint
+            self?.doneButton?.tintColor = AppConstants.Colors.activeNavBarTint
             self?.exportButton?.alpha = 0.0
         }, completion: { [weak self] _ in
             self?.exportButton?.isHidden = true
@@ -278,11 +328,10 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
     private func setCompleteNavBar() {
         exportButton?.isHidden = false
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            self?.cancelButton?.tintColor = .systemBlue
-            self?.doneButton?.tintColor = .systemBlue
+        UIView.animate(withDuration: AppConstants.UI.animationDuration) { [weak self] in
+            self?.cancelButton?.tintColor = AppConstants.Colors.completeNavBarTint
+            self?.doneButton?.tintColor = AppConstants.Colors.completeNavBarTint
             self?.exportButton?.alpha = 1.0
         }
     }
 }
-
