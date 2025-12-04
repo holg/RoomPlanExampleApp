@@ -52,6 +52,12 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         super.viewWillDisappear(flag)
         stopSession()
         cleanupResources()
+
+        // Clear delegates to prevent retain cycles (Issue #15)
+        if isBeingDismissed || isMovingFromParent {
+            roomCaptureView?.captureSession.delegate = nil
+            roomCaptureView?.delegate = nil
+        }
     }
 
     // MARK: - Setup
@@ -91,6 +97,12 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         captureError = nil
         scanStatistics = ScanStatistics()
         lastObjectCount = 0
+    }
+
+    deinit {
+        #if DEBUG
+        print("RoomCaptureViewController deallocated")
+        #endif
     }
 
     // MARK: - Status Label

@@ -39,6 +39,21 @@ class FloorPlanViewController: UIViewController {
         configureFloorPlan()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Clean up resources to prevent memory leaks (Issue #15)
+        if isBeingDismissed || isMovingFromParent {
+            capturedRoom = nil
+            floorPlanView.clear()
+        }
+    }
+
+    deinit {
+        #if DEBUG
+        print("FloorPlanViewController deallocated")
+        #endif
+    }
+
     // MARK: - Setup
 
     private func setupUI() {
