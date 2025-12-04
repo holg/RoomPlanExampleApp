@@ -232,6 +232,11 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
             preferredStyle: .actionSheet
         )
 
+        // View Floor Plan option
+        alert.addAction(UIAlertAction(title: "View Floor Plan", style: .default) { [weak self] _ in
+            self?.showFloorPlan()
+        })
+
         for format in ExportFormat.allCases {
             alert.addAction(UIAlertAction(title: format.rawValue, style: .default) { _ in
                 completion(format)
@@ -246,6 +251,18 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         }
 
         present(alert, animated: true)
+    }
+
+    private func showFloorPlan() {
+        guard let room = finalResults else {
+            showError(RoomCaptureError.noScanData)
+            return
+        }
+
+        let floorPlanVC = FloorPlanViewController(room: room)
+        let navController = UINavigationController(rootViewController: floorPlanVC)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true)
     }
 
     private func performExport(results: CapturedRoom, format: ExportFormat) {

@@ -19,6 +19,8 @@
 		CC000001DEADBEEF00000002 /* HapticFeedbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000002 /* HapticFeedbackManager.swift */; };
 		CC000001DEADBEEF00000003 /* ScanStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000003 /* ScanStatistics.swift */; };
 		CC000001DEADBEEF00000004 /* RoomCaptureError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000004 /* RoomCaptureError.swift */; };
+		CC000001DEADBEEF00000005 /* FloorPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000005 /* FloorPlanView.swift */; };
+		CC000001DEADBEEF00000006 /* FloorPlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000006 /* FloorPlanViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 		CC000002DEADBEEF00000002 /* HapticFeedbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackManager.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000003 /* ScanStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanStatistics.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000004 /* RoomCaptureError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCaptureError.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000005 /* FloorPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanView.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000006 /* FloorPlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanViewController.swift; sourceTree = "<group>"; };
 		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +136,8 @@
 				CC000002DEADBEEF00000003 /* ScanStatistics.swift */,
 				ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */,
 				ACEF94B42820AD2300776A9D /* RoomCaptureViewController.swift */,
+				CC000002DEADBEEF00000005 /* FloorPlanView.swift */,
+				CC000002DEADBEEF00000006 /* FloorPlanViewController.swift */,
 				ACEF94B62820AD2300776A9D /* Main.storyboard */,
 				71B6638328D0CABC00635A15 /* UnsupportedDevice.storyboard */,
 				ACEF94B92820AD2400776A9D /* Assets.xcassets */,
@@ -314,6 +320,8 @@
 				CC000001DEADBEEF00000002 /* HapticFeedbackManager.swift in Sources */,
 				CC000001DEADBEEF00000003 /* ScanStatistics.swift in Sources */,
 				CC000001DEADBEEF00000004 /* RoomCaptureError.swift in Sources */,
+				CC000001DEADBEEF00000005 /* FloorPlanView.swift in Sources */,
+				CC000001DEADBEEF00000006 /* FloorPlanViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
