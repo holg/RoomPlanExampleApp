@@ -47,6 +47,11 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         setupRoomCaptureView()
         setupStatusLabel()
         HapticFeedbackManager.shared.prepareGenerators()
+
+        #if DEBUG
+        MemoryMonitor.shared.startMonitoring(interval: 10.0)
+        MemoryMonitor.shared.checkpoint("RoomCaptureViewController loaded")
+        #endif
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -107,6 +112,10 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
     deinit {
         #if DEBUG
+        Task { @MainActor in
+            MemoryMonitor.shared.stopMonitoring()
+            _ = MemoryMonitor.shared.checkForLeaks(threshold: 20_000_000)
+        }
         print("RoomCaptureViewController deallocated")
         #endif
     }
