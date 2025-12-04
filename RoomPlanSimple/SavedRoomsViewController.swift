@@ -89,17 +89,63 @@ class SavedRoomsViewController: UIViewController {
     }
 
     private func showExportOptions(for room: SavedRoom) {
-        let url = RoomStorageManager.shared.getUsdzURL(for: room)
+        let alert = UIAlertController(
+            title: room.name,
+            message: "Choose what to export",
+            preferredStyle: .actionSheet
+        )
 
-        guard FileManager.default.fileExists(atPath: url.path) else {
-            showError("Room file not found")
+        // Export 3D Model
+        let usdzURL = RoomStorageManager.shared.getUsdzURL(for: room)
+        if FileManager.default.fileExists(atPath: usdzURL.path) {
+            alert.addAction(UIAlertAction(title: "Export 3D Model (USDZ)", style: .default) { [weak self] _ in
+                self?.shareItems([usdzURL])
+            })
+        }
+
+        // Export Floor Plan Image
+        if let floorPlanImage = RoomStorageManager.shared.getFloorPlanImage(for: room) {
+            alert.addAction(UIAlertAction(title: "Export Floor Plan Image", style: .default) { [weak self] _ in
+                self?.shareItems([floorPlanImage])
+            })
+        }
+
+        // Export Both
+        if FileManager.default.fileExists(atPath: usdzURL.path),
+           let floorPlanImage = RoomStorageManager.shared.getFloorPlanImage(for: room) {
+            alert.addAction(UIAlertAction(title: "Export Both", style: .default) { [weak self] _ in
+                self?.shareItems([usdzURL, floorPlanImage])
+            })
+        }
+
+        // View Floor Plan
+        if room.hasFloorPlan {
+            alert.addAction(UIAlertAction(title: "View Floor Plan", style: .default) { [weak self] _ in
+                self?.showFloorPlanPreview(for: room)
+            })
+        }
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        alert.popoverPresentationController?.sourceView = view
+        present(alert, animated: true)
+    }
+
+    private func shareItems(_ items: [Any]) {
+        let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        activityVC.popoverPresentationController?.sourceView = view
+        present(activityVC, animated: true)
+    }
+
+    private func showFloorPlanPreview(for room: SavedRoom) {
+        guard let image = RoomStorageManager.shared.getFloorPlanImage(for: room) else {
+            showError("Floor plan image not found")
             return
         }
 
-        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        activityVC.popoverPresentationController?.sourceView = view
-
-        present(activityVC, animated: true)
+        let previewVC = FloorPlanPreviewViewController(image: image, roomName: room.name)
+        let navController = UINavigationController(rootViewController: previewVC)
+        present(navController, animated: true)
     }
 
     private func deleteRoom(_ room: SavedRoom, at indexPath: IndexPath) {
@@ -157,18 +203,145 @@ class SavedRoomCell: UITableViewCell {
 
     static let reuseIdentifier = "SavedRoomCell"
 
+    private let thumbnailImageView = UIImageView()
+    private let nameLabel = UILabel()
+    private let dateLabel = UILabel()
+    private let summaryLabel = UILabel()
+    private let dimensionsLabel = UILabel()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
         accessoryType = .disclosureIndicator
+        setupCustomLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func setupCustomLayout() {
+        // Thumbnail
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailImageView.contentMode = .scaleAspectFit
+        thumbnailImageView.backgroundColor = .secondarySystemBackground
+        thumbnailImageView.layer.cornerRadius = 8
+        thumbnailImageView.clipsToBounds = true
+        contentView.addSubview(thumbnailImageView)
+
+        // Labels stack
+        let labelsStack = UIStackView()
+        labelsStack.translatesAutoresizingMaskIntoConstraints = false
+        labelsStack.axis = .vertical
+        labelsStack.spacing = 2
+        labelsStack.alignment = .leading
+        contentView.addSubview(labelsStack)
+
+        nameLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        dateLabel.font = .systemFont(ofSize: 13)
+        dateLabel.textColor = .secondaryLabel
+        summaryLabel.font = .systemFont(ofSize: 13)
+        summaryLabel.textColor = .secondaryLabel
+        dimensionsLabel.font = .systemFont(ofSize: 12)
+        dimensionsLabel.textColor = .tertiaryLabel
+
+        labelsStack.addArrangedSubview(nameLabel)
+        labelsStack.addArrangedSubview(dateLabel)
+        labelsStack.addArrangedSubview(summaryLabel)
+        labelsStack.addArrangedSubview(dimensionsLabel)
+
+        NSLayoutConstraint.activate([
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            thumbnailImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            thumbnailImageView.widthAnchor.constraint(equalToConstant: 60),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 60),
+            thumbnailImageView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8),
+            thumbnailImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -8),
+
+            labelsStack.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 12),
+            labelsStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+            labelsStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            labelsStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8),
+            labelsStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -8)
+        ])
+    }
+
     func configure(with room: SavedRoom) {
-        textLabel?.text = room.name
-        detailTextLabel?.text = "\(room.formattedDate) - \(room.summary)"
-        detailTextLabel?.textColor = .secondaryLabel
+        nameLabel.text = room.name
+        dateLabel.text = room.formattedDate
+        summaryLabel.text = room.summary
+        dimensionsLabel.text = room.dimensionsSummary
+
+        // Load floor plan thumbnail
+        if let image = RoomStorageManager.shared.getFloorPlanImage(for: room) {
+            thumbnailImageView.image = image
+        } else {
+            thumbnailImageView.image = UIImage(systemName: "square.3.layers.3d")
+            thumbnailImageView.tintColor = .systemGray
+        }
+
+        dimensionsLabel.isHidden = room.dimensionsSummary.isEmpty
+    }
+}
+
+// MARK: - FloorPlanPreviewViewController
+
+class FloorPlanPreviewViewController: UIViewController {
+
+    private let imageView = UIImageView()
+    private let image: UIImage
+    private let roomName: String
+
+    init(image: UIImage, roomName: String) {
+        self.image = image
+        self.roomName = roomName
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+    }
+
+    private func setupUI() {
+        title = roomName
+        view.backgroundColor = .systemBackground
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .done,
+            target: self,
+            action: #selector(dismissView)
+        )
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .action,
+            target: self,
+            action: #selector(shareImage)
+        )
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = image
+        view.addSubview(imageView)
+
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            imageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+        ])
+    }
+
+    @objc private func dismissView() {
+        dismiss(animated: true)
+    }
+
+    @objc private func shareImage() {
+        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        activityVC.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(activityVC, animated: true)
     }
 }

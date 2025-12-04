@@ -25,6 +25,11 @@
 		CC000001DEADBEEF00000008 /* MemoryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000008 /* MemoryMonitor.swift */; };
 		CC000001DEADBEEF00000009 /* RoomStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000009 /* RoomStorageManager.swift */; };
 		CC000001DEADBEEF0000000A /* SavedRoomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000A /* SavedRoomsViewController.swift */; };
+		CC000001DEADBEEF0000000B /* PhotoCaptureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000B /* PhotoCaptureManager.swift */; };
+		CC000001DEADBEEF0000000C /* WiFiSignalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000C /* WiFiSignalManager.swift */; };
+		CC000001DEADBEEF0000000D /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000D /* AppSettings.swift */; };
+		CC000001DEADBEEF0000000E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000E /* SettingsViewController.swift */; };
+		CC000001DEADBEEF0000000F /* FloorPlanExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +74,11 @@
 		CC000002DEADBEEF00000008 /* MemoryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryMonitor.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000009 /* RoomStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStorageManager.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF0000000A /* SavedRoomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedRoomsViewController.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000000B /* PhotoCaptureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCaptureManager.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000000C /* WiFiSignalManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiSignalManager.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000000D /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000000E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanExporter.swift; sourceTree = "<group>"; };
 		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,6 +160,11 @@
 				CC000002DEADBEEF00000008 /* MemoryMonitor.swift */,
 				CC000002DEADBEEF00000009 /* RoomStorageManager.swift */,
 				CC000002DEADBEEF0000000A /* SavedRoomsViewController.swift */,
+				CC000002DEADBEEF0000000B /* PhotoCaptureManager.swift */,
+				CC000002DEADBEEF0000000C /* WiFiSignalManager.swift */,
+				CC000002DEADBEEF0000000D /* AppSettings.swift */,
+				CC000002DEADBEEF0000000E /* SettingsViewController.swift */,
+				CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */,
 				ACEF94B62820AD2300776A9D /* Main.storyboard */,
 				71B6638328D0CABC00635A15 /* UnsupportedDevice.storyboard */,
 				ACEF94B92820AD2400776A9D /* Assets.xcassets */,
@@ -241,7 +256,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 2610;
 				ORGANIZATIONNAME = Apple;
 				TargetAttributes = {
 					21B841922EE1FF7B00502C5E = {
@@ -338,6 +353,11 @@
 				CC000001DEADBEEF00000008 /* MemoryMonitor.swift in Sources */,
 				CC000001DEADBEEF00000009 /* RoomStorageManager.swift in Sources */,
 				CC000001DEADBEEF0000000A /* SavedRoomsViewController.swift in Sources */,
+				CC000001DEADBEEF0000000B /* PhotoCaptureManager.swift in Sources */,
+				CC000001DEADBEEF0000000C /* WiFiSignalManager.swift in Sources */,
+				CC000001DEADBEEF0000000D /* AppSettings.swift in Sources */,
+				CC000001DEADBEEF0000000E /* SettingsViewController.swift in Sources */,
+				CC000001DEADBEEF0000000F /* FloorPlanExporter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,7 +411,6 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -418,7 +437,6 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -445,7 +463,6 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -473,7 +490,6 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -496,6 +512,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -526,6 +543,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -548,6 +566,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -557,6 +576,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -587,6 +607,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -602,6 +623,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -616,7 +638,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RoomPlanSimple/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
@@ -649,7 +670,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = U4GT5CZ7J7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RoomPlanSimple/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";

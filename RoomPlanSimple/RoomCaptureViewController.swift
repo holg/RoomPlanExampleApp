@@ -7,6 +7,7 @@ The sample app's main view controller that manages the scanning process.
 
 import UIKit
 import RoomPlan
+import AudioToolbox
 
 // MARK: - RoomCaptureViewController
 
@@ -34,6 +35,16 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     // Status UI
     private var statusLabel: UILabel?
 
+    // Photo capture
+    private let photoCaptureManager = PhotoCaptureManager()
+    private var photoButton: UIButton?
+    private var photoCountLabel: UILabel?
+
+    // WiFi signal tracking
+    private let wifiSignalManager = WiFiSignalManager()
+    private var wifiToggleButton: UIButton?
+    private var wifiStatusLabel: UILabel?
+
     // Export manager (Issue #14 refactoring)
     private lazy var exportManager = RoomExportManager(
         presentingViewController: self,
@@ -46,7 +57,17 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         super.viewDidLoad()
         setupRoomCaptureView()
         setupStatusLabel()
+        setupPhotoButton()
+        setupWifiToggle()
         HapticFeedbackManager.shared.prepareGenerators()
+
+        // Listen for WiFi permission granted notification
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(wifiTrackingDidEnable),
+            name: .wifiTrackingDidEnable,
+            object: nil
+        )
 
         #if DEBUG
         // Only log on significant events, not continuously (reduces debug slowdown)
@@ -103,11 +124,181 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         statusLabel = label
     }
 
+    private func setupPhotoButton() {
+        // Camera button for capturing reference photos
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "camera.fill"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 30
+        button.addTarget(self, action: #selector(capturePhoto), for: .touchUpInside)
+
+        view.addSubview(button)
+
+        // Photo count badge
+        let countLabel = UILabel()
+        countLabel.translatesAutoresizingMaskIntoConstraints = false
+        countLabel.font = .systemFont(ofSize: 12, weight: .bold)
+        countLabel.textColor = .white
+        countLabel.backgroundColor = .systemBlue
+        countLabel.textAlignment = .center
+        countLabel.layer.cornerRadius = 10
+        countLabel.clipsToBounds = true
+        countLabel.isHidden = true
+
+        view.addSubview(countLabel)
+
+        NSLayoutConstraint.activate([
+            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 60),
+            button.heightAnchor.constraint(equalToConstant: 60),
+
+            countLabel.topAnchor.constraint(equalTo: button.topAnchor, constant: -5),
+            countLabel.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: 5),
+            countLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 20),
+            countLabel.heightAnchor.constraint(equalToConstant: 20)
+        ])
+
+        photoButton = button
+        photoCountLabel = countLabel
+    }
+
+    private func setupWifiToggle() {
+        // WiFi toggle button (left side)
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "wifi"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 25
+        button.addTarget(self, action: #selector(toggleWifi), for: .touchUpInside)
+
+        view.addSubview(button)
+
+        // WiFi status label (shows signal/sample count)
+        let statusLabel = UILabel()
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        statusLabel.font = .systemFont(ofSize: 11, weight: .medium)
+        statusLabel.textColor = .white
+        statusLabel.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        statusLabel.textAlignment = .center
+        statusLabel.layer.cornerRadius = 8
+        statusLabel.clipsToBounds = true
+        statusLabel.isHidden = true
+
+        view.addSubview(statusLabel)
+
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 50),
+            button.heightAnchor.constraint(equalToConstant: 50),
+
+            statusLabel.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 8),
+            statusLabel.centerXAnchor.constraint(equalTo: button.centerXAnchor),
+            statusLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
+            statusLabel.heightAnchor.constraint(equalToConstant: 20)
+        ])
+
+        wifiToggleButton = button
+        wifiStatusLabel = statusLabel
+        updateWifiButtonState()
+    }
+
+    @objc private func toggleWifi() {
+        if !wifiSignalManager.isAuthorized {
+            // Request permission first
+            showWifiPermissionAlert()
+            return
+        }
+
+        wifiSignalManager.isEnabled.toggle()
+        updateWifiButtonState()
+
+        if wifiSignalManager.isEnabled && isScanning {
+            wifiSignalManager.startSampling()
+        } else {
+            wifiSignalManager.stopSampling()
+        }
+
+        HapticFeedbackManager.shared.objectDetected()
+    }
+
+    private func showWifiPermissionAlert() {
+        let alert = UIAlertController(
+            title: "WiFi Signal Tracking",
+            message: "To track WiFi signal strength during scanning, this app needs location permission. This data is stored locally and not shared.",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Enable", style: .default) { [weak self] _ in
+            self?.wifiSignalManager.requestPermission()
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        present(alert, animated: true)
+    }
+
+    private func updateWifiButtonState() {
+        let isOn = wifiSignalManager.isEnabled && wifiSignalManager.isAuthorized
+
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.wifiToggleButton?.backgroundColor = isOn
+                ? UIColor.systemBlue.withAlphaComponent(0.8)
+                : UIColor.black.withAlphaComponent(0.5)
+            self?.wifiToggleButton?.setImage(
+                UIImage(systemName: isOn ? "wifi" : "wifi.slash"),
+                for: .normal
+            )
+        }
+
+        wifiStatusLabel?.isHidden = !isOn
+    }
+
+    private func updateWifiStatus() {
+        guard wifiSignalManager.isEnabled else { return }
+
+        let count = wifiSignalManager.sampleCount
+        if let rssi = wifiSignalManager.currentRSSI {
+            wifiStatusLabel?.text = " \(rssi)dB (\(count)) "
+        } else {
+            wifiStatusLabel?.text = " \(count) samples "
+        }
+        wifiStatusLabel?.isHidden = false
+    }
+
+    @objc private func wifiTrackingDidEnable() {
+        // WiFi permission was granted and tracking is now enabled
+        updateWifiButtonState()
+        HapticFeedbackManager.shared.scanComplete()
+
+        // Start sampling if we're already scanning
+        if isScanning {
+            wifiSignalManager.startSampling()
+        }
+    }
+
     private func cleanupResources() {
         finalResults = nil
         captureError = nil
         scanStatistics = ScanStatistics()
         lastObjectCount = 0
+        photoCaptureManager.clearPhotos()
+        photoCaptureManager.stopSession()
+        wifiSignalManager.stopSampling()
+        wifiSignalManager.clearSamples()
+    }
+
+    private func updatePhotoCount() {
+        let count = photoCaptureManager.photoCount
+        if count > 0 {
+            photoCountLabel?.text = " \(count) "
+            photoCountLabel?.isHidden = false
+        } else {
+            photoCountLabel?.isHidden = true
+        }
     }
 
     deinit {
@@ -145,12 +336,27 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         isScanning = true
         captureError = nil
         roomCaptureView?.captureSession.run(configuration: roomCaptureSessionConfig)
+        photoCaptureManager.startSession()
+
+        // Apply default WiFi tracking setting
+        if AppSettings.shared.defaultWifiTracking && wifiSignalManager.isAuthorized {
+            wifiSignalManager.isEnabled = true
+            updateWifiButtonState()
+        }
+
+        // Start WiFi sampling if enabled
+        if wifiSignalManager.isEnabled && wifiSignalManager.isAuthorized {
+            wifiSignalManager.startSampling()
+        }
+
         updateNavBar(isScanning: true)
     }
 
     private func stopSession() {
         isScanning = false
         roomCaptureView?.captureSession.stop()
+        photoCaptureManager.stopSession()
+        wifiSignalManager.stopSampling()
         updateNavBar(isScanning: false)
     }
 
@@ -176,6 +382,51 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
             }
             self.finalResults = processedResult
             self.scanStatistics = ScanStatistics.from(processedResult)
+
+            // Auto-save if enabled in settings
+            if AppSettings.shared.autoSaveScans && error == nil {
+                self.performAutoSave(processedResult)
+            }
+        }
+    }
+
+    private func performAutoSave(_ room: CapturedRoom) {
+        do {
+            let savedRoom = try RoomStorageManager.shared.saveRoom(room)
+            showAutoSaveConfirmation(savedRoom)
+        } catch {
+            // Don't show error for auto-save - just log it
+            print("Auto-save failed: \(error)")
+        }
+    }
+
+    private func showAutoSaveConfirmation(_ savedRoom: SavedRoom) {
+        let toast = UILabel()
+        toast.text = "  Saved: \(savedRoom.name)  "
+        toast.font = .systemFont(ofSize: 14, weight: .medium)
+        toast.textColor = .white
+        toast.backgroundColor = UIColor.systemGreen.withAlphaComponent(0.9)
+        toast.layer.cornerRadius = 16
+        toast.clipsToBounds = true
+        toast.textAlignment = .center
+        toast.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(toast)
+
+        NSLayoutConstraint.activate([
+            toast.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            toast.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            toast.heightAnchor.constraint(equalToConstant: 32)
+        ])
+
+        toast.alpha = 0
+        UIView.animate(withDuration: 0.3, animations: {
+            toast.alpha = 1
+        }) { _ in
+            UIView.animate(withDuration: 0.3, delay: 2.0, options: [], animations: {
+                toast.alpha = 0
+            }) { _ in
+                toast.removeFromSuperview()
+            }
         }
     }
 
@@ -194,6 +445,9 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
         let totalObjects = room.walls.count + room.doors.count + room.windows.count + room.objects.count
         let stats = ScanStatistics.from(room)
 
+        // Get approximate position from room center (device is likely near edges during scan)
+        let roomCenter = RoomGeometry.getRoomCenter(from: room)
+
         Task { @MainActor in
             // Haptic feedback when new objects detected
             if totalObjects > self.lastObjectCount {
@@ -201,6 +455,12 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
                 self.lastObjectCount = totalObjects
             }
             self.scanStatistics = stats
+
+            // Update WiFi position tracking (use room center as reference)
+            if let center = roomCenter {
+                self.wifiSignalManager.updatePosition(center)
+            }
+            self.updateWifiStatus()
         }
     }
 
@@ -237,6 +497,75 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
     @IBAction func cancelScanning(_ sender: UIBarButtonItem) {
         navigationController?.dismiss(animated: true)
+    }
+
+    @objc private func capturePhoto() {
+        guard isScanning, let captureView = roomCaptureView else { return }
+
+        // Visual feedback - flash effect
+        photoButton?.alpha = 0.5
+        HapticFeedbackManager.shared.objectDetected()
+
+        // Play shutter sound
+        AudioServicesPlaySystemSound(1108)  // Camera shutter sound
+
+        // Create flash effect
+        let flashView = UIView(frame: view.bounds)
+        flashView.backgroundColor = .white
+        flashView.alpha = 0
+        view.addSubview(flashView)
+
+        UIView.animate(withDuration: 0.1, animations: {
+            flashView.alpha = 0.8
+        }) { _ in
+            UIView.animate(withDuration: 0.2, animations: {
+                flashView.alpha = 0
+            }) { _ in
+                flashView.removeFromSuperview()
+            }
+        }
+
+        // Capture screenshot of the RoomCaptureView (includes camera + AR overlay)
+        let renderer = UIGraphicsImageRenderer(bounds: captureView.bounds)
+        let image = renderer.image { context in
+            captureView.drawHierarchy(in: captureView.bounds, afterScreenUpdates: false)
+        }
+
+        // Save the captured image
+        photoCaptureManager.addPhoto(image)
+
+        UIView.animate(withDuration: 0.2) {
+            self.photoButton?.alpha = 1.0
+        }
+
+        updatePhotoCount()
+        showPhotoCapturedFeedback()
+    }
+
+    private func showPhotoCapturedFeedback() {
+        let feedbackLabel = UILabel()
+        feedbackLabel.text = "Photo captured"
+        feedbackLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        feedbackLabel.textColor = .white
+        feedbackLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        feedbackLabel.textAlignment = .center
+        feedbackLabel.layer.cornerRadius = 8
+        feedbackLabel.clipsToBounds = true
+        feedbackLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(feedbackLabel)
+        NSLayoutConstraint.activate([
+            feedbackLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            feedbackLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100),
+            feedbackLabel.widthAnchor.constraint(equalToConstant: 140),
+            feedbackLabel.heightAnchor.constraint(equalToConstant: 32)
+        ])
+
+        UIView.animate(withDuration: 0.3, delay: 1.0, options: [], animations: {
+            feedbackLabel.alpha = 0
+        }) { _ in
+            feedbackLabel.removeFromSuperview()
+        }
     }
 
     @IBAction func exportResults(_ sender: UIButton) {
@@ -290,7 +619,8 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
             return
         }
 
-        let floorPlanVC = FloorPlanViewController(room: room)
+        let samples = wifiSignalManager.collectedSamples
+        let floorPlanVC = FloorPlanViewController(room: room, wifiSamples: samples)
         let navController = UINavigationController(rootViewController: floorPlanVC)
         navController.modalPresentationStyle = .fullScreen
         present(navController, animated: true)

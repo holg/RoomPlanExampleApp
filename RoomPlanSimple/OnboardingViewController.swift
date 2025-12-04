@@ -12,17 +12,20 @@ class OnboardingViewController: UIViewController {
     @IBOutlet var existingScanView: UIView!
     @IBOutlet weak var startScanButton: UIButton?
 
-    private var savedRoomsButton: UIButton?
+    private var isStartingScan = false
+    private var activityIndicator: UIActivityIndicatorView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         checkDeviceCapability()
-        setupSavedRoomsButton()
+        setupNavigationButtons()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateSavedRoomsButton()
+        // Reset state when returning to this screen
+        resetScanButtonState()
     }
 
     private func checkDeviceCapability() {
@@ -32,29 +35,38 @@ class OnboardingViewController: UIViewController {
         }
     }
 
-    private func setupSavedRoomsButton() {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Saved Rooms", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
-        button.addTarget(self, action: #selector(showSavedRooms), for: .touchUpInside)
-        view.addSubview(button)
+    private func setupNavigationButtons() {
+        // Settings button on the left
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "gear"),
+            style: .plain,
+            target: self,
+            action: #selector(showSettings)
+        )
 
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
-        ])
+        // Saved rooms button on the right
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Saved",
+            style: .plain,
+            target: self,
+            action: #selector(showSavedRooms)
+        )
+    }
 
-        savedRoomsButton = button
+    @objc private func showSettings() {
+        let settingsVC = SettingsViewController(style: .insetGrouped)
+        let navController = UINavigationController(rootViewController: settingsVC)
+        present(navController, animated: true)
     }
 
     private func updateSavedRoomsButton() {
         let count = RoomStorageManager.shared.getSavedRooms().count
         if count > 0 {
-            savedRoomsButton?.setTitle("Saved Rooms (\(count))", for: .normal)
-            savedRoomsButton?.isHidden = false
+            navigationItem.rightBarButtonItem?.title = "Saved (\(count))"
+            navigationItem.rightBarButtonItem?.isEnabled = true
         } else {
-            savedRoomsButton?.isHidden = true
+            navigationItem.rightBarButtonItem?.title = "Saved"
+            navigationItem.rightBarButtonItem?.isEnabled = false
         }
     }
 
@@ -65,6 +77,9 @@ class OnboardingViewController: UIViewController {
     }
 
     @IBAction func startScan(_ sender: UIButton) {
+        // Prevent multiple taps while scan is starting
+        guard !isStartingScan else { return }
+
         guard RoomCaptureSession.isSupported else {
             showUnsupportedDeviceAlert()
             return
@@ -76,8 +91,45 @@ class OnboardingViewController: UIViewController {
             return
         }
 
+        // Show loading state
+        setLoadingState(true)
+
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true)
+    }
+
+    private func setLoadingState(_ loading: Bool) {
+        isStartingScan = loading
+
+        if loading {
+            // Disable button and show spinner
+            startScanButton?.isEnabled = false
+            startScanButton?.alpha = 0.6
+
+            let spinner = UIActivityIndicatorView(style: .medium)
+            spinner.color = .white
+            spinner.startAnimating()
+            spinner.translatesAutoresizingMaskIntoConstraints = false
+
+            if let button = startScanButton {
+                button.addSubview(spinner)
+                NSLayoutConstraint.activate([
+                    spinner.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16),
+                    spinner.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+                ])
+            }
+            activityIndicator = spinner
+        } else {
+            // Re-enable button and remove spinner
+            startScanButton?.isEnabled = true
+            startScanButton?.alpha = 1.0
+            activityIndicator?.removeFromSuperview()
+            activityIndicator = nil
+        }
+    }
+
+    private func resetScanButtonState() {
+        setLoadingState(false)
     }
 
     private func showUnsupportedDeviceAlert() {

@@ -30,6 +30,14 @@ enum FloorPlanConfig {
     static let labelFontSize: CGFloat = 12.0
 
     static let metersToPoints: CGFloat = 100.0 // Base scale: 1 meter = 100 points
+
+    // WiFi heatmap colors
+    static let wifiExcellentColor = UIColor.systemGreen
+    static let wifiGoodColor = UIColor.systemYellow
+    static let wifiFairColor = UIColor.systemOrange
+    static let wifiPoorColor = UIColor.systemRed
+    static let wifiDotRadius: CGFloat = 15.0
+    static let wifiDotAlpha: CGFloat = 0.6
 }
 
 // MARK: - Floor Plan Element
@@ -213,11 +221,24 @@ class FloorPlanView: UIView {
     private var scale: CGFloat = 1.0
     private var offset: CGPoint = .zero
 
+    // Zoom and pan
+    private var zoomScale: CGFloat = 1.0
+    private var panOffset: CGPoint = .zero
+    private var minZoom: CGFloat = 0.5
+    private var maxZoom: CGFloat = 4.0
+
+    // WiFi heatmap
+    private var wifiSamples: [WiFiSample] = []
+
     var showDimensions: Bool = true {
         didSet { setNeedsDisplay() }
     }
 
     var showLabels: Bool = true {
+        didSet { setNeedsDisplay() }
+    }
+
+    var showWifiHeatmap: Bool = true {
         didSet { setNeedsDisplay() }
     }
 
@@ -236,6 +257,52 @@ class FloorPlanView: UIView {
     private func setupView() {
         backgroundColor = FloorPlanConfig.backgroundColor
         contentMode = .redraw
+        isUserInteractionEnabled = true
+
+        // Add zoom gesture
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
+        addGestureRecognizer(pinchGesture)
+
+        // Add pan gesture
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        panGesture.minimumNumberOfTouches = 1
+        panGesture.maximumNumberOfTouches = 2
+        addGestureRecognizer(panGesture)
+
+        // Add double-tap to reset zoom
+        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
+        doubleTapGesture.numberOfTapsRequired = 2
+        addGestureRecognizer(doubleTapGesture)
+    }
+
+    // MARK: - Gesture Handlers
+
+    @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        if gesture.state == .changed {
+            let newZoom = zoomScale * gesture.scale
+            zoomScale = min(max(newZoom, minZoom), maxZoom)
+            gesture.scale = 1.0
+            setNeedsDisplay()
+        }
+    }
+
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        if gesture.state == .changed {
+            let translation = gesture.translation(in: self)
+            panOffset.x += translation.x
+            panOffset.y += translation.y
+            gesture.setTranslation(.zero, in: self)
+            setNeedsDisplay()
+        }
+    }
+
+    @objc private func handleDoubleTap(_ gesture: UITapGestureRecognizer) {
+        // Reset zoom and pan
+        UIView.animate(withDuration: 0.3) {
+            self.zoomScale = 1.0
+            self.panOffset = .zero
+            self.setNeedsDisplay()
+        }
     }
 
     // MARK: - Public Methods
@@ -246,8 +313,29 @@ class FloorPlanView: UIView {
         setNeedsDisplay()
     }
 
+    func configure(with room: CapturedRoom, wifiSamples: [WiFiSample]) {
+        floorPlanData = FloorPlanData.from(room)
+        self.wifiSamples = wifiSamples
+        calculateTransform()
+        setNeedsDisplay()
+    }
+
+    func setWifiSamples(_ samples: [WiFiSample]) {
+        self.wifiSamples = samples
+        setNeedsDisplay()
+    }
+
     func clear() {
         floorPlanData = nil
+        wifiSamples = []
+        zoomScale = 1.0
+        panOffset = .zero
+        setNeedsDisplay()
+    }
+
+    func resetZoom() {
+        zoomScale = 1.0
+        panOffset = .zero
         setNeedsDisplay()
     }
 
@@ -292,6 +380,16 @@ class FloorPlanView: UIView {
 
         context.saveGState()
 
+        // Apply zoom and pan transformation
+        context.translateBy(x: bounds.midX + panOffset.x, y: bounds.midY + panOffset.y)
+        context.scaleBy(x: zoomScale, y: zoomScale)
+        context.translateBy(x: -bounds.midX, y: -bounds.midY)
+
+        // Draw WiFi heatmap first (behind floor plan)
+        if showWifiHeatmap && !wifiSamples.isEmpty {
+            drawWifiHeatmap(in: context)
+        }
+
         // Draw elements by type (walls first, then others on top)
         let walls = data.elements.filter { if case .wall = $0.type { return true } else { return false } }
         let doors = data.elements.filter { if case .door = $0.type { return true } else { return false } }
@@ -312,6 +410,127 @@ class FloorPlanView: UIView {
         }
 
         context.restoreGState()
+
+        // Draw legend (not affected by zoom/pan)
+        if showWifiHeatmap && !wifiSamples.isEmpty {
+            drawWifiLegend(in: context)
+        }
+
+        // Draw zoom indicator
+        if zoomScale != 1.0 {
+            drawZoomIndicator(in: context)
+        }
+    }
+
+    // MARK: - WiFi Heatmap Drawing
+
+    private func drawWifiHeatmap(in context: CGContext) {
+        for sample in wifiSamples {
+            let point = transformPoint(x: sample.position.x, z: sample.position.z)
+            let color = colorForSignal(rssi: sample.rssi)
+            let radius = FloorPlanConfig.wifiDotRadius
+
+            // Draw gradient circle for each sample
+            context.saveGState()
+
+            // Outer glow
+            context.setFillColor(color.withAlphaComponent(0.2).cgColor)
+            context.fillEllipse(in: CGRect(
+                x: point.x - radius * 1.5,
+                y: point.y - radius * 1.5,
+                width: radius * 3,
+                height: radius * 3
+            ))
+
+            // Inner dot
+            context.setFillColor(color.withAlphaComponent(FloorPlanConfig.wifiDotAlpha).cgColor)
+            context.fillEllipse(in: CGRect(
+                x: point.x - radius,
+                y: point.y - radius,
+                width: radius * 2,
+                height: radius * 2
+            ))
+
+            // Center dot
+            context.setFillColor(color.cgColor)
+            context.fillEllipse(in: CGRect(
+                x: point.x - radius * 0.4,
+                y: point.y - radius * 0.4,
+                width: radius * 0.8,
+                height: radius * 0.8
+            ))
+
+            context.restoreGState()
+        }
+    }
+
+    private func colorForSignal(rssi: Int) -> UIColor {
+        switch rssi {
+        case -50...0:
+            return FloorPlanConfig.wifiExcellentColor
+        case -60..<(-50):
+            return FloorPlanConfig.wifiGoodColor
+        case -70..<(-60):
+            return FloorPlanConfig.wifiFairColor
+        default:
+            return FloorPlanConfig.wifiPoorColor
+        }
+    }
+
+    private func transformPoint(x: Float, z: Float) -> CGPoint {
+        CGPoint(
+            x: CGFloat(x) * FloorPlanConfig.metersToPoints * scale + offset.x,
+            y: CGFloat(z) * FloorPlanConfig.metersToPoints * scale + offset.y
+        )
+    }
+
+    private func drawWifiLegend(in context: CGContext) {
+        let legendX: CGFloat = 16
+        let legendY: CGFloat = bounds.height - 100
+        let dotSize: CGFloat = 12
+        let spacing: CGFloat = 20
+
+        let items: [(String, UIColor)] = [
+            ("Excellent", FloorPlanConfig.wifiExcellentColor),
+            ("Good", FloorPlanConfig.wifiGoodColor),
+            ("Fair", FloorPlanConfig.wifiFairColor),
+            ("Poor", FloorPlanConfig.wifiPoorColor)
+        ]
+
+        // Background
+        let bgRect = CGRect(x: legendX - 8, y: legendY - 8, width: 90, height: CGFloat(items.count) * spacing + 12)
+        context.setFillColor(UIColor.systemBackground.withAlphaComponent(0.9).cgColor)
+        context.fill(bgRect)
+        context.setStrokeColor(UIColor.separator.cgColor)
+        context.setLineWidth(0.5)
+        context.stroke(bgRect)
+
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 10),
+            .foregroundColor: UIColor.label
+        ]
+
+        for (index, item) in items.enumerated() {
+            let y = legendY + CGFloat(index) * spacing
+
+            // Draw colored dot
+            context.setFillColor(item.1.cgColor)
+            context.fillEllipse(in: CGRect(x: legendX, y: y, width: dotSize, height: dotSize))
+
+            // Draw label
+            item.0.draw(at: CGPoint(x: legendX + dotSize + 6, y: y - 1), withAttributes: attributes)
+        }
+    }
+
+    private func drawZoomIndicator(in context: CGContext) {
+        let text = String(format: "%.0f%%", zoomScale * 100)
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .medium),
+            .foregroundColor: UIColor.secondaryLabel
+        ]
+        let size = text.size(withAttributes: attributes)
+        let point = CGPoint(x: bounds.width - size.width - 16, y: bounds.height - size.height - 16)
+        text.draw(at: point, withAttributes: attributes)
     }
 
     private func drawElement(_ element: FloorPlanElement, in context: CGContext) {

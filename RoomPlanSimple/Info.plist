@@ -4,6 +4,8 @@
 <dict>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to your camera to use the LiDAR scanner. This is used to create a model of your room for planning purposes. Your camera images and LiDAR data are only used for this purpose and are not stored or shared.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location access is required to track WiFi signal strength during room scanning. This allows mapping WiFi coverage throughout the scanned space. Your location data is only used locally and is not shared.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

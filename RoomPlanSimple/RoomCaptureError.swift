@@ -50,17 +50,52 @@ enum RoomCaptureError: LocalizedError {
 // MARK: - Export Format
 
 enum ExportFormat: String, CaseIterable {
-    case parametric = "Parametric (Furniture)"
-    case mesh = "3D Mesh"
+    // USDZ variants (native RoomPlan export)
+    case parametric = "USDZ Parametric"
+    case model = "USDZ Textured"
+    case mesh = "USDZ Mesh"
+    // Converted formats (via ModelIO)
+    case obj = "OBJ (Blender/3DS Max)"
+    case stl = "STL (3D Printing)"
 
     var exportOption: CapturedRoom.USDExportOptions {
         switch self {
-        case .parametric: return .parametric
+        case .parametric, .obj, .stl: return .parametric
+        case .model: return .model
         case .mesh: return .mesh
         }
     }
 
-    var fileExtension: String { AppConstants.Export.fileExtension }
+    var fileExtension: String {
+        switch self {
+        case .parametric, .model, .mesh: return "usdz"
+        case .obj: return "obj"
+        case .stl: return "stl"
+        }
+    }
+
+    /// Whether this format requires conversion from USDZ
+    var requiresConversion: Bool {
+        switch self {
+        case .parametric, .model, .mesh: return false
+        case .obj, .stl: return true
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .parametric:
+            return "Clean geometry with furniture shapes"
+        case .model:
+            return "Includes captured surface textures"
+        case .mesh:
+            return "Raw 3D mesh data"
+        case .obj:
+            return "Universal format for Blender, 3DS Max, Maya"
+        case .stl:
+            return "Standard format for 3D printing"
+        }
+    }
 }
 
 import RoomPlan

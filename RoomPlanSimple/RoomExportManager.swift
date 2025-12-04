@@ -7,6 +7,8 @@ Manages export functionality for captured room data (Issue #14 refactoring).
 
 import UIKit
 import RoomPlan
+import ModelIO
+import SceneKit
 
 /// Handles room export operations and share sheet presentation
 @MainActor
@@ -78,11 +80,39 @@ final class RoomExportManager {
         try? FileManager.default.removeItem(at: destinationURL)
 
         do {
-            try results.export(to: destinationURL, exportOptions: format.exportOption)
+            if format.requiresConversion {
+                // First export to USDZ, then convert
+                let tempUSDZ = FileManager.default.temporaryDirectory.appendingPathComponent("temp_export.usdz")
+                try? FileManager.default.removeItem(at: tempUSDZ)
+                try results.export(to: tempUSDZ, exportOptions: format.exportOption)
+
+                // Convert using ModelIO
+                try convertToFormat(from: tempUSDZ, to: destinationURL, format: format)
+
+                // Clean up temp file
+                try? FileManager.default.removeItem(at: tempUSDZ)
+            } else {
+                try results.export(to: destinationURL, exportOptions: format.exportOption)
+            }
             presentShareSheet(for: destinationURL, onError: onError)
         } catch {
             onError(RoomCaptureError.exportFailed(underlying: error))
         }
+    }
+
+    /// Convert USDZ to OBJ/STL using ModelIO
+    private func convertToFormat(from sourceURL: URL, to destinationURL: URL, format: ExportFormat) throws {
+        // Load USDZ with ModelIO
+        let asset = MDLAsset(url: sourceURL)
+
+        // Check if format is supported
+        guard MDLAsset.canExportFileExtension(format.fileExtension) else {
+            throw NSError(domain: "RoomExportManager", code: 1,
+                          userInfo: [NSLocalizedDescriptionKey: "Format \(format.fileExtension) not supported"])
+        }
+
+        // Export to target format
+        try asset.export(to: destinationURL)
     }
 
     // MARK: - Private Methods
