@@ -17,22 +17,22 @@ enum Secrets {
     /// Example: API key for external service
     /// Usage: Secrets.apiKey
     static var apiKey: String? {
-        get("API_KEY")
+        return get("API_KEY")
     }
 
     /// Example: Google Maps API key
     static var googleMapsApiKey: String? {
-        get("GOOGLE_MAPS_API_KEY")
+        return get("GOOGLE_MAPS_API_KEY")
     }
 
     /// Example: Backend API base URL
     static var apiBaseURL: String? {
-        get("API_BASE_URL")
+        return get("API_BASE_URL")
     }
 
     /// Example: Feature flag for analytics
     static var analyticsEnabled: Bool {
-        getBool("ENABLE_ANALYTICS", default: false)
+        return getBool("ENABLE_ANALYTICS", default: false)
     }
 
     // MARK: - Add your own secrets above this line

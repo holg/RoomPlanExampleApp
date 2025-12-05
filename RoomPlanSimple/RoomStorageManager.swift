@@ -19,9 +19,20 @@ final class RoomStorageManager {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
 
+    /// Directory for saved rooms - uses iCloud if enabled, otherwise local storage
     private var savedRoomsDirectory: URL {
-        let docs = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let roomsDir = docs.appendingPathComponent("SavedRooms", isDirectory: true)
+        let baseDir: URL
+
+        // Use iCloud if enabled and available
+        if AppSettings.shared.iCloudSyncEnabled,
+           let iCloudURL = fileManager.url(forUbiquityContainerIdentifier: nil) {
+            baseDir = iCloudURL.appendingPathComponent("Documents")
+        } else {
+            // Use Application Support (persists across app updates, not backed up by default)
+            baseDir = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        }
+
+        let roomsDir = baseDir.appendingPathComponent("SavedRooms", isDirectory: true)
 
         if !fileManager.fileExists(atPath: roomsDir.path) {
             try? fileManager.createDirectory(at: roomsDir, withIntermediateDirectories: true)

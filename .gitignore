@@ -103,9 +103,8 @@ iOSInjectionProject/
 # Note: Secrets.swift is the LOADER code and SHOULD be committed
 # Only .env files (containing actual secrets) are gitignored
 
-## Local Xcode configuration overrides
-Configuration/DevelopmentLocal.xcconfig
-**/DevelopmentLocal.xcconfig
+## Local Xcode configuration (contains Team ID and Bundle Identifier)
+Configuration/Development.xcconfig
 
 ## Documentation files (generated)
 COMMIT_MESSAGE.txt

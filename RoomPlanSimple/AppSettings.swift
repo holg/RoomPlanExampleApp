@@ -22,6 +22,7 @@ final class AppSettings {
         static let defaultWifiTracking = "defaultWifiTracking"
         static let defaultExportFormat = "defaultExportFormat"
         static let showPhotosInFloorPlan = "showPhotosInFloorPlan"
+        static let iCloudSyncEnabled = "iCloudSyncEnabled"
     }
 
     // MARK: - Settings Properties
@@ -67,6 +68,37 @@ final class AppSettings {
         }
     }
 
+    /// Enable iCloud sync for saved rooms (default: false)
+    var iCloudSyncEnabled: Bool {
+        get { UserDefaults.standard.bool(forKey: Keys.iCloudSyncEnabled) }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Keys.iCloudSyncEnabled)
+            NotificationCenter.default.post(name: .settingsDidChange, object: nil)
+            // When iCloud sync is toggled, migrate existing rooms
+            if newValue != UserDefaults.standard.bool(forKey: Keys.iCloudSyncEnabled) {
+                Task {
+                    await migrateRoomsToNewLocation()
+                }
+            }
+        }
+    }
+
+    // MARK: - iCloud Availability
+
+    /// Check if iCloud is available on this device
+    var isICloudAvailable: Bool {
+        return FileManager.default.ubiquityIdentityToken != nil
+    }
+
+    // MARK: - Migration
+
+    /// Migrate saved rooms when iCloud sync is toggled
+    @MainActor
+    private func migrateRoomsToNewLocation() async {
+        // Post notification to trigger migration in RoomStorageManager
+        NotificationCenter.default.post(name: .iCloudSyncToggled, object: nil)
+    }
+
     // MARK: - Reset
 
     /// Reset all settings to defaults
@@ -75,6 +107,7 @@ final class AppSettings {
         defaultWifiTracking = false
         defaultExportFormat = "parametric"
         showPhotosInFloorPlan = false
+        iCloudSyncEnabled = false
     }
 }
 
@@ -82,4 +115,5 @@ final class AppSettings {
 
 extension Notification.Name {
     static let settingsDidChange = Notification.Name("settingsDidChange")
+    static let iCloudSyncToggled = Notification.Name("iCloudSyncToggled")
 }

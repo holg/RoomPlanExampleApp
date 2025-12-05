@@ -31,6 +31,7 @@ class SettingsViewController: UITableViewController {
 
     private enum SavingRow: Int, CaseIterable {
         case autoSave
+        case iCloudSync
     }
 
     private enum AboutRow: Int, CaseIterable {
@@ -131,6 +132,33 @@ class SettingsViewController: UITableViewController {
                 self?.settings.autoSaveScans = isOn
             }
             return cell
+
+        case .iCloudSync:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
+            let subtitle: String
+            if settings.isICloudAvailable {
+                subtitle = "Sync saved rooms across all your devices"
+            } else {
+                subtitle = "iCloud is not available. Sign in to iCloud in Settings."
+            }
+            cell.configure(
+                title: "iCloud Sync",
+                subtitle: subtitle,
+                isOn: settings.iCloudSyncEnabled
+            ) { [weak self] isOn in
+                guard let self = self else { return }
+                if isOn && !self.settings.isICloudAvailable {
+                    // Show alert that iCloud is not available
+                    self.showICloudNotAvailableAlert()
+                    // Reset toggle
+                    cell.switchControl.setOn(false, animated: true)
+                } else {
+                    self.settings.iCloudSyncEnabled = isOn
+                }
+            }
+            // Disable toggle if iCloud not available
+            cell.switchControl.isEnabled = settings.isICloudAvailable
+            return cell
         }
     }
 
@@ -183,6 +211,16 @@ class SettingsViewController: UITableViewController {
 
         present(alert, animated: true)
     }
+
+    private func showICloudNotAvailableAlert() {
+        let alert = UIAlertController(
+            title: "iCloud Not Available",
+            message: "iCloud is not available on this device. Please sign in to iCloud in Settings to enable sync.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - SwitchCell
@@ -193,6 +231,11 @@ private class SwitchCell: UITableViewCell {
     private let subtitleLabel = UILabel()
     private let toggleSwitch = UISwitch()
     private var onToggle: ((Bool) -> Void)?
+
+    /// Public access to the switch for external configuration
+    var switchControl: UISwitch {
+        return toggleSwitch
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
