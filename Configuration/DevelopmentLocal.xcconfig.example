@@ -1,0 +1,14 @@
+//
+//  DevelopmentLocal.xcconfig.example
+//  Local Development Overrides
+//
+//  Copy this file to DevelopmentLocal.xcconfig and set your own Team ID
+//  DevelopmentLocal.xcconfig is gitignored and won't be committed
+//
+
+// Override with your Apple Developer Team ID
+// Find it at: https://developer.apple.com/account (Team ID column)
+DEVELOPMENT_TEAM = YOUR_TEAM_ID_HERE
+
+// Optional: Override bundle identifier for local testing
+// PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.RoomPlanSimple

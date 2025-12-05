@@ -30,6 +30,7 @@
 		CC000001DEADBEEF0000000D /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000D /* AppSettings.swift */; };
 		CC000001DEADBEEF0000000E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000E /* SettingsViewController.swift */; };
 		CC000001DEADBEEF0000000F /* FloorPlanExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */; };
+		CC000001DEADBEEF00000010 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000010 /* Secrets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		CC000002DEADBEEF0000000D /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF0000000E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanExporter.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000010 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,6 +167,7 @@
 				CC000002DEADBEEF0000000D /* AppSettings.swift */,
 				CC000002DEADBEEF0000000E /* SettingsViewController.swift */,
 				CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */,
+				CC000002DEADBEEF00000010 /* Secrets.swift */,
 				ACEF94B62820AD2300776A9D /* Main.storyboard */,
 				71B6638328D0CABC00635A15 /* UnsupportedDevice.storyboard */,
 				ACEF94B92820AD2400776A9D /* Assets.xcassets */,
@@ -358,6 +361,7 @@
 				CC000001DEADBEEF0000000D /* AppSettings.swift in Sources */,
 				CC000001DEADBEEF0000000E /* SettingsViewController.swift in Sources */,
 				CC000001DEADBEEF0000000F /* FloorPlanExporter.swift in Sources */,
+				CC000001DEADBEEF00000010 /* Secrets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
