@@ -215,15 +215,16 @@ extension CapturedRoom.Surface: RoomPlanSurface {}
 
 // MARK: - Floor Plan View
 
-class FloorPlanView: UIView {
+class FloorPlanView: UIView, UIGestureRecognizerDelegate {
 
     private var floorPlanData: FloorPlanData?
     private var scale: CGFloat = 1.0
     private var offset: CGPoint = .zero
 
-    // Zoom and pan
+    // Zoom, pan, and rotation
     private var zoomScale: CGFloat = 1.0
     private var panOffset: CGPoint = .zero
+    private var rotationAngle: CGFloat = 0.0
     private var minZoom: CGFloat = 0.5
     private var maxZoom: CGFloat = 4.0
 
@@ -269,10 +270,19 @@ class FloorPlanView: UIView {
         panGesture.maximumNumberOfTouches = 2
         addGestureRecognizer(panGesture)
 
+        // Add rotation gesture
+        let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(_:)))
+        addGestureRecognizer(rotationGesture)
+
         // Add double-tap to reset zoom
         let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
         doubleTapGesture.numberOfTapsRequired = 2
         addGestureRecognizer(doubleTapGesture)
+
+        // Enable simultaneous gestures
+        pinchGesture.delegate = self
+        panGesture.delegate = self
+        rotationGesture.delegate = self
     }
 
     // MARK: - Gesture Handlers
@@ -296,11 +306,27 @@ class FloorPlanView: UIView {
         }
     }
 
+    @objc private func handleRotation(_ gesture: UIRotationGestureRecognizer) {
+        switch gesture.state {
+        case .changed:
+            rotationAngle += gesture.rotation
+            gesture.rotation = 0.0
+            setNeedsDisplay()
+        case .began, .ended:
+            #if DEBUG
+            print("Rotation: \(rotationAngle * 180 / .pi)°")
+            #endif
+        default:
+            break
+        }
+    }
+
     @objc private func handleDoubleTap(_ gesture: UITapGestureRecognizer) {
-        // Reset zoom and pan
+        // Reset zoom, pan, and rotation
         UIView.animate(withDuration: 0.3) {
             self.zoomScale = 1.0
             self.panOffset = .zero
+            self.rotationAngle = 0.0
             self.setNeedsDisplay()
         }
     }
@@ -336,6 +362,7 @@ class FloorPlanView: UIView {
     func resetZoom() {
         zoomScale = 1.0
         panOffset = .zero
+        rotationAngle = 0.0
         setNeedsDisplay()
     }
 
@@ -380,8 +407,9 @@ class FloorPlanView: UIView {
 
         context.saveGState()
 
-        // Apply zoom and pan transformation
+        // Apply zoom, pan, and rotation transformations
         context.translateBy(x: bounds.midX + panOffset.x, y: bounds.midY + panOffset.y)
+        context.rotate(by: rotationAngle)
         context.scaleBy(x: zoomScale, y: zoomScale)
         context.translateBy(x: -bounds.midX, y: -bounds.midY)
 
@@ -416,9 +444,9 @@ class FloorPlanView: UIView {
             drawWifiLegend(in: context)
         }
 
-        // Draw zoom indicator
-        if zoomScale != 1.0 {
-            drawZoomIndicator(in: context)
+        // Draw zoom/rotation indicator
+        if zoomScale != 1.0 || rotationAngle != 0.0 {
+            drawTransformIndicator(in: context)
         }
     }
 
@@ -522,8 +550,19 @@ class FloorPlanView: UIView {
         }
     }
 
-    private func drawZoomIndicator(in context: CGContext) {
-        let text = String(format: "%.0f%%", zoomScale * 100)
+    private func drawTransformIndicator(in context: CGContext) {
+        var indicators: [String] = []
+
+        if zoomScale != 1.0 {
+            indicators.append(String(format: "%.0f%%", zoomScale * 100))
+        }
+
+        if rotationAngle != 0.0 {
+            let degrees = Int(rotationAngle * 180 / .pi) % 360
+            indicators.append(String(format: "%d°", degrees))
+        }
+
+        let text = indicators.joined(separator: " • ")
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .medium),
             .foregroundColor: UIColor.secondaryLabel
@@ -683,5 +722,12 @@ class FloorPlanView: UIView {
         context.rotate(by: -.pi / 2)
         depthText.draw(at: CGPoint(x: -depthSize.width / 2, y: -depthSize.height / 2), withAttributes: attributes)
         context.restoreGState()
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Allow pinch, pan, and rotation to work simultaneously
+        return true
     }
 }

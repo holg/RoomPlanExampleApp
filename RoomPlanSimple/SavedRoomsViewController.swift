@@ -183,7 +183,11 @@ extension SavedRoomsViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        showExportOptions(for: savedRooms[indexPath.row])
+        let room = savedRooms[indexPath.row]
+        let viewerVC = RoomViewerViewController(savedRoom: room)
+        let navController = UINavigationController(rootViewController: viewerVC)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

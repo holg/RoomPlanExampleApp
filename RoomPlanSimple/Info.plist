@@ -40,5 +40,11 @@
 		<key>UILaunchScreen</key>
 		<string>LaunchScreen</string>
 	</dict>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>

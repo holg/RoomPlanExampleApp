@@ -392,7 +392,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
     private func performAutoSave(_ room: CapturedRoom) {
         do {
-            let savedRoom = try RoomStorageManager.shared.saveRoom(room)
+            let savedRoom = try RoomStorageManager.shared.saveRoom(room, photoManager: photoCaptureManager)
             showAutoSaveConfirmation(savedRoom)
         } catch {
             // Don't show error for auto-save - just log it
@@ -593,7 +593,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
     private func saveRoom(_ room: CapturedRoom) {
         do {
-            let savedRoom = try RoomStorageManager.shared.saveRoom(room)
+            let savedRoom = try RoomStorageManager.shared.saveRoom(room, photoManager: photoCaptureManager)
             showSaveSuccess(savedRoom)
             HapticFeedbackManager.shared.scanComplete()
         } catch {

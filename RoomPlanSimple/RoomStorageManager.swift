@@ -27,16 +27,38 @@ final class RoomStorageManager {
         if AppSettings.shared.iCloudSyncEnabled,
            let iCloudURL = fileManager.url(forUbiquityContainerIdentifier: nil) {
             baseDir = iCloudURL.appendingPathComponent("Documents")
+            #if DEBUG
+            print("✅ Using iCloud directory: \(baseDir.path)")
+            #endif
         } else {
             // Use Application Support (persists across app updates, not backed up by default)
             baseDir = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            #if DEBUG
+            print("💾 Using local directory: \(baseDir.path)")
+            #endif
         }
 
         let roomsDir = baseDir.appendingPathComponent("SavedRooms", isDirectory: true)
 
         if !fileManager.fileExists(atPath: roomsDir.path) {
-            try? fileManager.createDirectory(at: roomsDir, withIntermediateDirectories: true)
+            do {
+                try fileManager.createDirectory(at: roomsDir, withIntermediateDirectories: true)
+                #if DEBUG
+                print("📁 Created SavedRooms directory at: \(roomsDir.path)")
+                #endif
+            } catch {
+                #if DEBUG
+                print("❌ Failed to create directory: \(error)")
+                #endif
+            }
         }
+
+        #if DEBUG
+        print("📂 SavedRooms directory: \(roomsDir.path)")
+        print("📊 iCloud enabled: \(AppSettings.shared.iCloudSyncEnabled)")
+        print("☁️  iCloud available: \(AppSettings.shared.isICloudAvailable)")
+        #endif
+
         return roomsDir
     }
 
@@ -45,7 +67,7 @@ final class RoomStorageManager {
     // MARK: - Public API
 
     /// Save a captured room with metadata and floor plan image
-    func saveRoom(_ room: CapturedRoom, name: String? = nil) throws -> SavedRoom {
+    func saveRoom(_ room: CapturedRoom, name: String? = nil, photoManager: PhotoCaptureManager? = nil) throws -> SavedRoom {
         let id = UUID()
         let timestamp = Date()
         let roomName = name ?? "Room \(formatDate(timestamp))"
@@ -58,6 +80,21 @@ final class RoomStorageManager {
         let floorPlanFileName = "\(id.uuidString)_floorplan.png"
         let floorPlanURL = savedRoomsDirectory.appendingPathComponent(floorPlanFileName)
         saveFloorPlanImage(for: room, to: floorPlanURL)
+
+        // Save photos if photo manager provided
+        if let photoManager = photoManager, photoManager.photoCount > 0 {
+            do {
+                let roomDirectory = savedRoomsDirectory.appendingPathComponent(id.uuidString, isDirectory: true)
+                _ = try photoManager.copyPhotos(to: roomDirectory)
+                #if DEBUG
+                print("📸 Saved \(photoManager.photoCount) photos to \(roomDirectory.path)")
+                #endif
+            } catch {
+                #if DEBUG
+                print("⚠️  Failed to save photos: \(error)")
+                #endif
+            }
+        }
 
         // Create metadata
         let stats = ScanStatistics.from(room)
@@ -103,20 +140,52 @@ final class RoomStorageManager {
 
     /// Get all saved rooms
     func getSavedRooms() -> [SavedRoom] {
-        guard let files = try? fileManager.contentsOfDirectory(at: savedRoomsDirectory, includingPropertiesForKeys: nil) else {
+        let directory = savedRoomsDirectory
+
+        #if DEBUG
+        print("📁 Loading saved rooms from: \(directory.path)")
+        #endif
+
+        guard let files = try? fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil) else {
+            #if DEBUG
+            print("⚠️  Could not read directory contents")
+            #endif
             return []
         }
+
+        #if DEBUG
+        print("📄 Found \(files.count) files in directory")
+        let jsonFiles = files.filter { $0.pathExtension == "json" }
+        print("📋 Found \(jsonFiles.count) JSON files")
+        #endif
 
         return files
             .filter { $0.pathExtension == "json" }
             .compactMap { url -> SavedRoom? in
                 guard let data = try? Data(contentsOf: url),
                       let room = try? decoder.decode(SavedRoom.self, from: data) else {
+                    #if DEBUG
+                    print("⚠️  Failed to decode room from: \(url.lastPathComponent)")
+                    #endif
                     return nil
                 }
                 return room
             }
             .sorted { $0.date > $1.date }
+    }
+
+    /// Note: CapturedRoom cannot be reloaded from USDZ files.
+    /// This is a limitation of the RoomPlan API - CapturedRoom is only available during live scanning.
+    /// To view saved rooms, use the USDZ file directly with SceneKit.
+
+    /// Load WiFi samples for a saved room
+    func loadWiFiSamples(for room: SavedRoom) -> [WiFiSample] {
+        let wifiURL = savedRoomsDirectory.appendingPathComponent("\(room.id.uuidString)_wifi.json")
+        guard let data = try? Data(contentsOf: wifiURL),
+              let samples = try? decoder.decode([WiFiSample].self, from: data) else {
+            return []
+        }
+        return samples
     }
 
     /// Get USDZ file URL for a saved room
@@ -160,6 +229,72 @@ final class RoomStorageManager {
             try deleteRoom(room)
         }
     }
+
+    // MARK: - Debug Helpers
+
+    #if DEBUG
+    /// Print detailed information about storage locations and contents
+    func debugStorageInfo() {
+        print("\n" + String(repeating: "=", count: 60))
+        print("📊 STORAGE DEBUG INFO")
+        print(String(repeating: "=", count: 60))
+
+        // iCloud availability
+        print("\n☁️  iCloud Status:")
+        print("   - iCloud available: \(AppSettings.shared.isICloudAvailable)")
+        print("   - iCloud enabled in app: \(AppSettings.shared.iCloudSyncEnabled)")
+        if let token = fileManager.ubiquityIdentityToken {
+            print("   - iCloud identity token: \(token)")
+        } else {
+            print("   - ⚠️  No iCloud identity token (not signed in)")
+        }
+
+        // Current directory
+        print("\n📂 Current SavedRooms Directory:")
+        print("   \(savedRoomsDirectory.path)")
+
+        // Directory contents
+        if let files = try? fileManager.contentsOfDirectory(at: savedRoomsDirectory, includingPropertiesForKeys: nil) {
+            print("\n📄 Files in directory: \(files.count)")
+            for file in files {
+                let fileSize = (try? fileManager.attributesOfItem(atPath: file.path)[.size] as? Int64) ?? 0
+                let sizeStr = ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file)
+                print("   - \(file.lastPathComponent) (\(sizeStr))")
+            }
+        } else {
+            print("\n⚠️  Could not read directory")
+        }
+
+        // Alternative directories
+        print("\n📁 Other Storage Locations:")
+        let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        let appSupportRooms = appSupport.appendingPathComponent("SavedRooms")
+        print("   Local (App Support): \(appSupportRooms.path)")
+        if fileManager.fileExists(atPath: appSupportRooms.path) {
+            if let localFiles = try? fileManager.contentsOfDirectory(at: appSupportRooms, includingPropertiesForKeys: nil) {
+                print("   → Contains \(localFiles.count) files")
+            }
+        } else {
+            print("   → Does not exist")
+        }
+
+        if let iCloudURL = fileManager.url(forUbiquityContainerIdentifier: nil) {
+            let iCloudRooms = iCloudURL.appendingPathComponent("Documents/SavedRooms")
+            print("   iCloud: \(iCloudRooms.path)")
+            if fileManager.fileExists(atPath: iCloudRooms.path) {
+                if let iCloudFiles = try? fileManager.contentsOfDirectory(at: iCloudRooms, includingPropertiesForKeys: nil) {
+                    print("   → Contains \(iCloudFiles.count) files")
+                }
+            } else {
+                print("   → Does not exist yet")
+            }
+        } else {
+            print("   iCloud: Not available")
+        }
+
+        print(String(repeating: "=", count: 60) + "\n")
+    }
+    #endif
 
     // MARK: - Private
 

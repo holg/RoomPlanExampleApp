@@ -31,6 +31,9 @@
 		CC000001DEADBEEF0000000E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000E /* SettingsViewController.swift */; };
 		CC000001DEADBEEF0000000F /* FloorPlanExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */; };
 		CC000001DEADBEEF00000010 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000010 /* Secrets.swift */; };
+		CC000001DEADBEEF00000011 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000011 /* HomeViewController.swift */; };
+		CC000001DEADBEEF00000012 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000012 /* HelpViewController.swift */; };
+		CC000001DEADBEEF00000013 /* RoomViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000013 /* RoomViewerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,7 @@
 /* Begin PBXFileReference section */
 		05C7567A6B268FC70FFB0FCC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		213F69B12A128836000BE6B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		21618BD02EE30B690023823F /* RoomPlanSimple.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RoomPlanSimple.entitlements; sourceTree = "<group>"; };
 		21B841932EE1FF7B00502C5E /* RoomPlanSimpleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoomPlanSimpleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B841A62EE200CA00502C5E /* RoomPlanSimpleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoomPlanSimpleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35A95C3C90A8D7FA01AA694A /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
@@ -81,6 +85,9 @@
 		CC000002DEADBEEF0000000E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanExporter.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000010 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000011 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000012 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000013 /* RoomViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewerViewController.swift; sourceTree = "<group>"; };
 		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,6 +155,7 @@
 		ACEF94AF2820AD2300776A9D /* RoomPlanSimple */ = {
 			isa = PBXGroup;
 			children = (
+				21618BD02EE30B690023823F /* RoomPlanSimple.entitlements */,
 				ACEF94B02820AD2300776A9D /* AppDelegate.swift */,
 				ACEF94B22820AD2300776A9D /* SceneDelegate.swift */,
 				CC000002DEADBEEF00000001 /* Constants.swift */,
@@ -155,7 +163,10 @@
 				CC000002DEADBEEF00000002 /* HapticFeedbackManager.swift */,
 				CC000002DEADBEEF00000003 /* ScanStatistics.swift */,
 				ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */,
+				CC000002DEADBEEF00000011 /* HomeViewController.swift */,
+				CC000002DEADBEEF00000012 /* HelpViewController.swift */,
 				ACEF94B42820AD2300776A9D /* RoomCaptureViewController.swift */,
+				CC000002DEADBEEF00000013 /* RoomViewerViewController.swift */,
 				CC000002DEADBEEF00000005 /* FloorPlanView.swift */,
 				CC000002DEADBEEF00000006 /* FloorPlanViewController.swift */,
 				CC000002DEADBEEF00000007 /* RoomExportManager.swift */,
@@ -362,6 +373,9 @@
 				CC000001DEADBEEF0000000E /* SettingsViewController.swift in Sources */,
 				CC000001DEADBEEF0000000F /* FloorPlanExporter.swift in Sources */,
 				CC000001DEADBEEF00000010 /* Secrets.swift in Sources */,
+				CC000001DEADBEEF00000011 /* HomeViewController.swift in Sources */,
+				CC000001DEADBEEF00000012 /* HelpViewController.swift in Sources */,
+				CC000001DEADBEEF00000013 /* RoomViewerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +653,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RoomPlanSimple/RoomPlanSimple.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -671,6 +686,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RoomPlanSimple/RoomPlanSimple.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

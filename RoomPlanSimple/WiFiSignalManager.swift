@@ -188,14 +188,17 @@ final class WiFiSignalManager: NSObject, ObservableObject {
     private func fetchCurrentWiFiInfo(completion: @escaping (String?, String?, Int?) -> Void) {
         // Method 1: Use NEHotspotNetwork (iOS 14+)
         if #available(iOS 14.0, *) {
-            NEHotspotNetwork.fetchCurrent { network in
+            NEHotspotNetwork.fetchCurrent { [weak self] network in
+                guard let self = self else { return }
                 if let network = network {
                     // Note: RSSI is not directly available from NEHotspotNetwork
                     // We'll use a simulated value or get it from other sources
                     completion(network.ssid, network.bssid, self.estimateRSSI())
                 } else {
                     // Fallback to legacy method
-                    self.fetchWiFiInfoLegacy(completion: completion)
+                    Task { @MainActor in
+                        self.fetchWiFiInfoLegacy(completion: completion)
+                    }
                 }
             }
         } else {
@@ -203,6 +206,7 @@ final class WiFiSignalManager: NSObject, ObservableObject {
         }
     }
 
+    @MainActor
     private func fetchWiFiInfoLegacy(completion: @escaping (String?, String?, Int?) -> Void) {
         // Legacy method using CNCopyCurrentNetworkInfo
         var ssid: String?
@@ -224,7 +228,7 @@ final class WiFiSignalManager: NSObject, ObservableObject {
     /// Estimate RSSI (actual RSSI requires private APIs or CoreWLAN on macOS)
     /// On iOS, we can't get real RSSI without private APIs
     /// This returns a simulated value for demonstration
-    private func estimateRSSI() -> Int {
+    nonisolated private func estimateRSSI() -> Int {
         // In a real app, you might:
         // 1. Use private APIs (not App Store safe)
         // 2. Use a network speed test as proxy
