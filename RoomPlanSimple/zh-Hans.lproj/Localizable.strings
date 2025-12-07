@@ -1,0 +1,211 @@
+/*
+  Localizable.strings (Simplified Chinese)
+  RoomPlanSimple
+*/
+
+// MARK: - Common
+"common.ok" = "确定";
+"common.cancel" = "取消";
+"common.done" = "完成";
+"common.save" = "保存";
+"common.delete" = "删除";
+"common.edit" = "编辑";
+"common.close" = "关闭";
+"common.share" = "分享";
+"common.error" = "错误";
+"common.success" = "成功";
+"common.loading" = "加载中...";
+
+// MARK: - Home Screen
+"home.title" = "房间规划";
+"home.header" = "3D 房间扫描";
+"home.newScan.title" = "开始新扫描";
+"home.newScan.subtitle" = "使用激光雷达扫描房间";
+"home.newScan.noLidar" = "需要激光雷达 • 可查看已保存房间";
+"home.savedRooms.title" = "已保存房间";
+"home.savedRooms.subtitle" = "查看和管理您的扫描";
+"home.savedRooms.count" = "已保存 %d 个%@";
+"home.savedRooms.room" = "房间";
+"home.savedRooms.rooms" = "房间";
+"home.help.title" = "帮助与功能";
+"home.help.subtitle" = "了解您可以做什么";
+"home.recentScans" = "最近扫描";
+"home.emptyState" = "还没有保存的扫描。\n开始您的第一次扫描吧！";
+"home.features" = "功能";
+
+// MARK: - Features List
+"feature.3dCapture.title" = "3D 房间捕捉";
+"feature.3dCapture.description" = "激光雷达驱动的房间扫描";
+"feature.wifiHeatmap.title" = "WiFi 热图";
+"feature.wifiHeatmap.description" = "追踪整个房间的信号强度";
+"feature.photoCapture.title" = "照片捕捉";
+"feature.photoCapture.description" = "扫描时拍摄照片";
+"feature.export.title" = "多种导出格式";
+"feature.export.description" = "USDZ、OBJ、STL、DXF、SVG 格式";
+"feature.icloud.title" = "iCloud 同步";
+"feature.icloud.description" = "在所有设备上同步房间";
+
+// MARK: - Scanning
+"scan.title" = "扫描中";
+"scan.preparing" = "准备相机...";
+"scan.instructions" = "将设备对准房间并缓慢移动";
+"scan.wifiTracking" = "WiFi 追踪";
+"scan.photosTaken" = "%d 张照片";
+"scan.duration" = "时长：%@";
+"scan.done" = "完成";
+"scan.cancel" = "取消";
+"scan.processing" = "处理扫描中...";
+"scan.saving" = "保存中...";
+"scan.autoSaved" = "已自动保存";
+"scan.saveSuccess" = "房间保存成功！";
+"scan.error.title" = "扫描错误";
+"scan.error.sessionFailed" = "扫描会话失败";
+"scan.error.exportFailed" = "导出房间模型失败";
+"scan.error.saveFailed" = "保存房间失败";
+
+// MARK: - Saved Rooms
+"savedRooms.title" = "已保存房间";
+"savedRooms.empty" = "还没有保存的房间";
+"savedRooms.deleteConfirm.title" = "删除房间？";
+"savedRooms.deleteConfirm.message" = "您确定要删除 \"%@\" 吗？";
+"savedRooms.deleteConfirm.delete" = "删除";
+"savedRooms.deleteSuccess" = "房间已删除";
+"savedRooms.deleteError" = "删除房间失败";
+"savedRooms.deleteAll.title" = "删除所有房间？";
+"savedRooms.deleteAll.message" = "您确定要删除所有 %d 个房间吗？此操作无法撤销。";
+"savedRooms.deleteAll.button" = "删除全部";
+"savedRooms.walls" = "%d 面墙";
+"savedRooms.doors" = "%d 扇门";
+"savedRooms.windows" = "%d 扇窗";
+"savedRooms.objects" = "%d 个物体";
+"savedRooms.area" = "%.1f 平方米";
+"savedRooms.dimensions" = "%.1f × %.1f 米";
+"savedRooms.selectRooms" = "选择";
+"savedRooms.selectedCount" = "已选择 %d 个";
+"savedRooms.deleteSelected" = "删除";
+"savedRooms.exportSelected" = "导出";
+"savedRooms.deleteSelected.title" = "删除选定的房间？";
+"savedRooms.deleteSelected.message" = "这将永久删除 %d 个选定的房间。";
+
+// MARK: - Room Viewer
+"viewer.title" = "房间详情";
+"viewer.mode.info" = "信息";
+"viewer.mode.3d" = "3D 模型";
+"viewer.mode.floorPlan" = "平面图";
+"viewer.mode.wifi" = "WiFi 热图";
+"viewer.mode.photos" = "照片";
+"viewer.export" = "导出";
+"viewer.noFloorPlan" = "平面图不可用";
+"viewer.no3DModel" = "3D 模型不可用";
+"viewer.noWifiData" = "此扫描无 WiFi 数据";
+"viewer.floorPlanHint" = "捏合缩放 • 拖动平移";
+"viewer.model3DHint" = "拖动旋转 • 捏合缩放 • 双指拖动平移";
+"viewer.photosPlaceholder" = "扫描期间拍摄的照片";
+"viewer.wifiSamplesCount" = "WiFi 热图：已收集 %d 个样本";
+"viewer.info.name" = "名称";
+"viewer.info.date" = "日期";
+"viewer.info.dimensions" = "尺寸";
+"viewer.info.area" = "面积";
+"viewer.info.walls" = "墙";
+"viewer.info.doors" = "门";
+"viewer.info.windows" = "窗";
+"viewer.info.objects" = "物体";
+
+// MARK: - Export
+"export.title" = "导出房间";
+"export.format" = "格式";
+"export.usdz" = "USDZ（3D 模型）";
+"export.obj" = "OBJ（3D 模型）";
+"export.stl" = "STL（3D 打印）";
+"export.dxf" = "DXF（CAD 平面图）";
+"export.svg" = "SVG（矢量平面图）";
+"export.png" = "PNG（平面图图片）";
+"export.chooseExport" = "选择导出内容";
+"export.floorPlanImage" = "平面图图片";
+"export.both" = "3D 模型和平面图";
+"export.processing" = "导出中...";
+"export.success" = "导出成功";
+"export.error" = "导出失败";
+"export.share" = "分享 %@";
+
+// MARK: - Settings
+"settings.title" = "设置";
+"settings.scanning" = "扫描";
+"settings.saving" = "保存";
+"settings.language" = "语言";
+"settings.about" = "关于";
+"settings.wifiTracking.title" = "默认启用 WiFi 追踪";
+"settings.wifiTracking.subtitle" = "开始扫描时自动启用 WiFi 信号追踪";
+"settings.autoSave.title" = "自动保存扫描";
+"settings.autoSave.subtitle" = "自动保存完成的扫描到您的资料库";
+"settings.icloud.title" = "iCloud 同步";
+"settings.icloud.subtitle" = "在所有设备上同步已保存的房间";
+"settings.icloud.unavailable" = "iCloud 不可用。请在设置中登录 iCloud。";
+"settings.icloud.notAvailable.title" = "iCloud 不可用";
+"settings.icloud.notAvailable.message" = "此设备上 iCloud 不可用。请在设置中登录 iCloud 以启用同步。";
+"settings.appLanguage.title" = "应用语言";
+"settings.appLanguage.subtitle" = "更改应用语言（需要重启）";
+"settings.appLanguage.systemDefault" = "系统默认";
+"settings.version" = "版本";
+"settings.reset" = "恢复默认设置";
+"settings.reset.confirm.title" = "重置设置";
+"settings.reset.confirm.message" = "您确定要将所有设置恢复为默认值吗？";
+"settings.reset.confirm.reset" = "重置";
+"settings.language.restart.title" = "需要重启";
+"settings.language.restart.message" = "请重启应用以使语言更改生效。";
+"settings.language.restart.restartNow" = "立即重启";
+
+// MARK: - Help
+"help.title" = "帮助";
+"help.gettingStarted" = "入门";
+"help.icloudSetup" = "iCloud 设置";
+"help.scanning" = "扫描";
+"help.viewing" = "查看房间";
+"help.exporting" = "导出";
+"help.troubleshooting" = "故障排除";
+
+// MARK: - Alerts
+"alert.unsupportedDevice.title" = "扫描不可用";
+"alert.unsupportedDevice.message" = "此设备没有 3D 房间扫描所需的激光雷达。\n\n您仍然可以：\n• 查看其他设备保存的房间\n• 访问通过 iCloud 同步的房间\n• 浏览 3D 模型和平面图";
+"alert.scanningUnavailable" = "无法开始扫描 - 在故事板中找不到 RoomCaptureViewController";
+
+// MARK: - Permissions (Info.plist)
+"NSCameraUsageDescription" = "此应用需要访问您的相机以使用激光雷达扫描仪。这用于创建房间模型以进行规划。您的相机图像和激光雷达数据仅用于此目的，不会存储或共享。";
+"NSLocationWhenInUseUsageDescription" = "需要位置访问权限以在房间扫描期间追踪 WiFi 信号强度。这允许映射整个扫描空间的 WiFi 覆盖范围。您的位置数据仅在本地使用，不会共享。";
+
+// MARK: - Floor Plan
+"floorPlan.title" = "平面图";
+"floorPlan.dimensions" = "尺寸";
+"floorPlan.measurements" = "显示测量值";
+"floorPlan.view" = "查看平面图";
+"floorPlan.notFound" = "未找到平面图";
+"floorPlan.error" = "生成平面图失败";
+
+// MARK: - WiFi Heatmap
+"wifi.title" = "WiFi 热图";
+"wifi.signalStrength" = "信号强度";
+"wifi.excellent" = "极好";
+"wifi.good" = "良好";
+"wifi.fair" = "一般";
+"wifi.poor" = "较差";
+"wifi.noData" = "未收集 WiFi 数据";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "欢迎使用房间规划";
+"onboarding.feature1.title" = "3D 扫描房间";
+"onboarding.feature1.description" = "使用设备的激光雷达扫描仪创建任何房间的精确 3D 模型";
+"onboarding.feature2.title" = "追踪 WiFi 覆盖";
+"onboarding.feature2.description" = "映射 WiFi 信号强度以优化您的网络";
+"onboarding.feature3.title" = "导出与分享";
+"onboarding.feature3.description" = "导出为多种格式，用于设计和规划软件";
+"onboarding.getStarted" = "开始使用";
+"onboarding.skip" = "跳过";
+
+// MARK: - Statistics
+"stats.empty" = "空扫描";
+"stats.wallCount" = "墙数量";
+"stats.doorCount" = "门数量";
+"stats.windowCount" = "窗数量";
+"stats.objectCount" = "物体数量";
+"stats.floorArea" = "面积";
+"stats.roomDimensions" = "房间尺寸";

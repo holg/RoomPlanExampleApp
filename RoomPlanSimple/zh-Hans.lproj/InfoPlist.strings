@@ -1,0 +1,13 @@
+/*
+  InfoPlist.strings (Simplified Chinese)
+  RoomPlanSimple
+
+  Localized permission messages
+*/
+
+"NSCameraUsageDescription" = "此应用需要访问您的相机以使用激光雷达扫描仪。这用于创建房间模型以进行规划。您的相机图像和激光雷达数据仅用于此目的，不会存储或共享。";
+
+"NSLocationWhenInUseUsageDescription" = "需要位置访问权限以在房间扫描期间追踪 WiFi 信号强度。这允许映射整个扫描空间的 WiFi 覆盖范围。您的位置数据仅在本地使用，不会共享。";
+
+"CFBundleDisplayName" = "房间规划";
+"CFBundleName" = "房间规划";

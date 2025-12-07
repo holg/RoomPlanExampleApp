@@ -1,0 +1,211 @@
+/*
+  Localizable.strings (Brazilian Portuguese)
+  RoomPlanSimple
+*/
+
+// MARK: - Common
+"common.ok" = "OK";
+"common.cancel" = "Cancelar";
+"common.done" = "Concluído";
+"common.save" = "Salvar";
+"common.delete" = "Excluir";
+"common.edit" = "Editar";
+"common.close" = "Fechar";
+"common.share" = "Compartilhar";
+"common.error" = "Erro";
+"common.success" = "Sucesso";
+"common.loading" = "Carregando...";
+
+// MARK: - Home Screen
+"home.title" = "RoomPlan";
+"home.header" = "Scanner 3D de Ambientes";
+"home.newScan.title" = "Iniciar Nova Digitalização";
+"home.newScan.subtitle" = "Digitalize um ambiente com LiDAR";
+"home.newScan.noLidar" = "Requer scanner LiDAR • Visualize os ambientes salvos";
+"home.savedRooms.title" = "Ambientes Salvos";
+"home.savedRooms.subtitle" = "Visualize e gerencie suas digitalizações";
+"home.savedRooms.count" = "%d %@ %@";
+"home.savedRooms.room" = "ambiente";
+"home.savedRooms.rooms" = "ambientes";
+"home.help.title" = "Ajuda e Recursos";
+"home.help.subtitle" = "Aprenda o que você pode fazer";
+"home.recentScans" = "Digitalizações Recentes";
+"home.emptyState" = "Nenhuma digitalização salva ainda.\nInicie sua primeira digitalização acima!";
+"home.features" = "Recursos";
+
+// MARK: - Features List
+"feature.3dCapture.title" = "Captura 3D de Ambientes";
+"feature.3dCapture.description" = "Digitalização de ambientes com LiDAR";
+"feature.wifiHeatmap.title" = "Mapa de Calor WiFi";
+"feature.wifiHeatmap.description" = "Rastreie a intensidade do sinal no ambiente";
+"feature.photoCapture.title" = "Captura de Fotos";
+"feature.photoCapture.description" = "Tire fotos durante a digitalização";
+"feature.export.title" = "Múltiplas Exportações";
+"feature.export.description" = "Formatos USDZ, OBJ, STL, DXF, SVG";
+"feature.icloud.title" = "Sincronização iCloud";
+"feature.icloud.description" = "Sincronize ambientes em todos os seus dispositivos";
+
+// MARK: - Scanning
+"scan.title" = "Digitalizando";
+"scan.preparing" = "Preparando câmera...";
+"scan.instructions" = "Aponte seu dispositivo para o ambiente e mova-se devagar";
+"scan.wifiTracking" = "Rastreamento WiFi";
+"scan.photosTaken" = "%d Fotos";
+"scan.duration" = "Duração: %@";
+"scan.done" = "Concluído";
+"scan.cancel" = "Cancelar";
+"scan.processing" = "Processando digitalização...";
+"scan.saving" = "Salvando...";
+"scan.autoSaved" = "Salvo automaticamente";
+"scan.saveSuccess" = "Ambiente salvo com sucesso!";
+"scan.error.title" = "Erro na Digitalização";
+"scan.error.sessionFailed" = "Falha na sessão de digitalização";
+"scan.error.exportFailed" = "Falha ao exportar modelo do ambiente";
+"scan.error.saveFailed" = "Falha ao salvar ambiente";
+
+// MARK: - Saved Rooms
+"savedRooms.title" = "Ambientes Salvos";
+"savedRooms.empty" = "Nenhum ambiente salvo ainda";
+"savedRooms.deleteConfirm.title" = "Excluir Ambiente?";
+"savedRooms.deleteConfirm.message" = "Tem certeza que deseja excluir \"%@\"?";
+"savedRooms.deleteConfirm.delete" = "Excluir";
+"savedRooms.deleteSuccess" = "Ambiente excluído";
+"savedRooms.deleteError" = "Falha ao excluir ambiente";
+"savedRooms.deleteAll.title" = "Excluir todos os ambientes?";
+"savedRooms.deleteAll.message" = "Tem certeza que deseja excluir todos os %d ambientes? Esta ação não pode ser desfeita.";
+"savedRooms.deleteAll.button" = "Excluir todos";
+"savedRooms.walls" = "%d paredes";
+"savedRooms.doors" = "%d portas";
+"savedRooms.windows" = "%d janelas";
+"savedRooms.objects" = "%d objetos";
+"savedRooms.area" = "%.1f m²";
+"savedRooms.dimensions" = "%.1f × %.1f m";
+"savedRooms.selectRooms" = "Selecionar";
+"savedRooms.selectedCount" = "%d selecionado(s)";
+"savedRooms.deleteSelected" = "Excluir";
+"savedRooms.exportSelected" = "Exportar";
+"savedRooms.deleteSelected.title" = "Excluir Ambientes Selecionados?";
+"savedRooms.deleteSelected.message" = "Isso excluirá permanentemente %d ambiente(s) selecionado(s).";
+
+// MARK: - Room Viewer
+"viewer.title" = "Detalhes do Ambiente";
+"viewer.mode.info" = "Info";
+"viewer.mode.3d" = "Modelo 3D";
+"viewer.mode.floorPlan" = "Planta Baixa";
+"viewer.mode.wifi" = "Mapa de Calor WiFi";
+"viewer.mode.photos" = "Fotos";
+"viewer.export" = "Exportar";
+"viewer.noFloorPlan" = "Planta baixa não disponível";
+"viewer.no3DModel" = "Modelo 3D não disponível";
+"viewer.noWifiData" = "Dados WiFi não disponíveis para esta digitalização";
+"viewer.floorPlanHint" = "Belisque para dar zoom • Arraste para mover";
+"viewer.model3DHint" = "Arraste para girar • Belisque para dar zoom • Dois dedos para mover";
+"viewer.photosPlaceholder" = "Fotos capturadas durante a digitalização";
+"viewer.wifiSamplesCount" = "Mapa de calor WiFi: %d amostras coletadas";
+"viewer.info.name" = "Nome";
+"viewer.info.date" = "Data";
+"viewer.info.dimensions" = "Dimensões";
+"viewer.info.area" = "Área do Piso";
+"viewer.info.walls" = "Paredes";
+"viewer.info.doors" = "Portas";
+"viewer.info.windows" = "Janelas";
+"viewer.info.objects" = "Objetos";
+
+// MARK: - Export
+"export.title" = "Exportar Ambiente";
+"export.format" = "Formato";
+"export.usdz" = "USDZ (Modelo 3D)";
+"export.obj" = "OBJ (Modelo 3D)";
+"export.stl" = "STL (Impressão 3D)";
+"export.dxf" = "DXF (Planta CAD)";
+"export.svg" = "SVG (Planta Vetorial)";
+"export.png" = "PNG (Imagem da Planta)";
+"export.chooseExport" = "Escolher exportação";
+"export.floorPlanImage" = "Imagem da planta baixa";
+"export.both" = "Modelo 3D e planta baixa";
+"export.processing" = "Exportando...";
+"export.success" = "Exportado com sucesso";
+"export.error" = "Falha na exportação";
+"export.share" = "Compartilhar %@";
+
+// MARK: - Settings
+"settings.title" = "Configurações";
+"settings.scanning" = "Digitalização";
+"settings.saving" = "Salvamento";
+"settings.language" = "Idioma";
+"settings.about" = "Sobre";
+"settings.wifiTracking.title" = "Rastreamento WiFi por Padrão";
+"settings.wifiTracking.subtitle" = "Ativar automaticamente o rastreamento de sinal WiFi ao iniciar uma digitalização";
+"settings.autoSave.title" = "Salvar Automaticamente";
+"settings.autoSave.subtitle" = "Salvar automaticamente digitalizações concluídas na sua biblioteca";
+"settings.icloud.title" = "Sincronização iCloud";
+"settings.icloud.subtitle" = "Sincronize ambientes salvos em todos os seus dispositivos";
+"settings.icloud.unavailable" = "iCloud não está disponível. Entre com sua conta iCloud em Ajustes.";
+"settings.icloud.notAvailable.title" = "iCloud Não Disponível";
+"settings.icloud.notAvailable.message" = "O iCloud não está disponível neste dispositivo. Entre com sua conta iCloud em Ajustes para ativar a sincronização.";
+"settings.appLanguage.title" = "Idioma do App";
+"settings.appLanguage.subtitle" = "Alterar idioma do app (reinicialização necessária)";
+"settings.appLanguage.systemDefault" = "Padrão do Sistema";
+"settings.version" = "Versão";
+"settings.reset" = "Restaurar Padrões";
+"settings.reset.confirm.title" = "Restaurar Configurações";
+"settings.reset.confirm.message" = "Tem certeza que deseja restaurar todas as configurações para os padrões?";
+"settings.reset.confirm.reset" = "Restaurar";
+"settings.language.restart.title" = "Reinicialização Necessária";
+"settings.language.restart.message" = "Reinicie o app para que a mudança de idioma tenha efeito.";
+"settings.language.restart.restartNow" = "Reiniciar Agora";
+
+// MARK: - Help
+"help.title" = "Ajuda";
+"help.gettingStarted" = "Primeiros Passos";
+"help.icloudSetup" = "Configuração do iCloud";
+"help.scanning" = "Digitalização";
+"help.viewing" = "Visualizando Ambientes";
+"help.exporting" = "Exportação";
+"help.troubleshooting" = "Solução de Problemas";
+
+// MARK: - Alerts
+"alert.unsupportedDevice.title" = "Digitalização Não Disponível";
+"alert.unsupportedDevice.message" = "Este dispositivo não possui scanner LiDAR necessário para digitalização 3D de ambientes.\n\nVocê ainda pode:\n• Visualizar ambientes salvos de outros dispositivos\n• Acessar ambientes sincronizados via iCloud\n• Navegar modelos 3D e plantas baixas";
+"alert.scanningUnavailable" = "Não foi possível iniciar a digitalização - RoomCaptureViewController não encontrado no storyboard";
+
+// MARK: - Permissions (Info.plist)
+"NSCameraUsageDescription" = "Este app requer acesso à sua câmera para usar o scanner LiDAR. Isso é usado para criar um modelo do seu ambiente para fins de planejamento. Suas imagens de câmera e dados LiDAR são usados apenas para este propósito e não são armazenados ou compartilhados.";
+"NSLocationWhenInUseUsageDescription" = "O acesso à localização é necessário para rastrear a intensidade do sinal WiFi durante a digitalização do ambiente. Isso permite mapear a cobertura WiFi em todo o espaço digitalizado. Seus dados de localização são usados apenas localmente e não são compartilhados.";
+
+// MARK: - Floor Plan
+"floorPlan.title" = "Planta Baixa";
+"floorPlan.dimensions" = "Dimensões";
+"floorPlan.measurements" = "Mostrar Medidas";
+"floorPlan.view" = "Ver planta baixa";
+"floorPlan.notFound" = "Planta baixa não encontrada";
+"floorPlan.error" = "Falha ao gerar planta baixa";
+
+// MARK: - WiFi Heatmap
+"wifi.title" = "Mapa de Calor WiFi";
+"wifi.signalStrength" = "Intensidade do Sinal";
+"wifi.excellent" = "Excelente";
+"wifi.good" = "Bom";
+"wifi.fair" = "Regular";
+"wifi.poor" = "Fraco";
+"wifi.noData" = "Nenhum dado WiFi coletado";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Bem-vindo ao RoomPlan";
+"onboarding.feature1.title" = "Digitalize Ambientes em 3D";
+"onboarding.feature1.description" = "Use o scanner LiDAR do seu dispositivo para criar modelos 3D precisos de qualquer ambiente";
+"onboarding.feature2.title" = "Rastreie Cobertura WiFi";
+"onboarding.feature2.description" = "Mapeie a intensidade do sinal WiFi para otimizar sua rede";
+"onboarding.feature3.title" = "Exporte e Compartilhe";
+"onboarding.feature3.description" = "Exporte para múltiplos formatos para software de design e planejamento";
+"onboarding.getStarted" = "Começar";
+"onboarding.skip" = "Pular";
+
+// MARK: - Statistics
+"stats.empty" = "Digitalização vazia";
+"stats.wallCount" = "Quantidade de Paredes";
+"stats.doorCount" = "Quantidade de Portas";
+"stats.windowCount" = "Quantidade de Janelas";
+"stats.objectCount" = "Quantidade de Objetos";
+"stats.floorArea" = "Área do Piso";
+"stats.roomDimensions" = "Dimensões do Ambiente";

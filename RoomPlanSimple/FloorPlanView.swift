@@ -42,27 +42,85 @@ enum FloorPlanConfig {
 
 // MARK: - Floor Plan Element
 
-struct FloorPlanElement {
+struct FloorPlanElement: Codable {
     let rect: CGRect
     let rotation: CGFloat
     let type: ElementType
     let label: String?
 
-    enum ElementType {
+    enum ElementType: Codable {
         case wall
         case door
         case window
         case opening
-        case object(category: CapturedRoom.Object.Category)
+        case object(category: String)
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            let value = try container.decode(String.self)
+            switch value {
+            case "wall": self = .wall
+            case "door": self = .door
+            case "window": self = .window
+            case "opening": self = .opening
+            default:
+                if value.starts(with: "object:") {
+                    let category = String(value.dropFirst(7))
+                    self = .object(category: category)
+                } else {
+                    self = .object(category: value)
+                }
+            }
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch self {
+            case .wall: try container.encode("wall")
+            case .door: try container.encode("door")
+            case .window: try container.encode("window")
+            case .opening: try container.encode("opening")
+            case .object(let category): try container.encode("object:\(category)")
+            }
+        }
     }
 }
 
 // MARK: - Floor Plan Data
 
-struct FloorPlanData {
+struct FloorPlanData: Codable {
     let elements: [FloorPlanElement]
     let boundingBox: CGRect
     let roomDimensions: (width: Float, height: Float, depth: Float)
+
+    enum CodingKeys: String, CodingKey {
+        case elements, boundingBox, roomWidth, roomHeight, roomDepth
+    }
+
+    init(elements: [FloorPlanElement], boundingBox: CGRect, roomDimensions: (width: Float, height: Float, depth: Float)) {
+        self.elements = elements
+        self.boundingBox = boundingBox
+        self.roomDimensions = roomDimensions
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        elements = try container.decode([FloorPlanElement].self, forKey: .elements)
+        boundingBox = try container.decode(CGRect.self, forKey: .boundingBox)
+        let width = try container.decode(Float.self, forKey: .roomWidth)
+        let height = try container.decode(Float.self, forKey: .roomHeight)
+        let depth = try container.decode(Float.self, forKey: .roomDepth)
+        roomDimensions = (width, height, depth)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(elements, forKey: .elements)
+        try container.encode(boundingBox, forKey: .boundingBox)
+        try container.encode(roomDimensions.width, forKey: .roomWidth)
+        try container.encode(roomDimensions.height, forKey: .roomHeight)
+        try container.encode(roomDimensions.depth, forKey: .roomDepth)
+    }
 
     static func from(_ room: CapturedRoom) -> FloorPlanData {
         var elements: [FloorPlanElement] = []
@@ -116,7 +174,7 @@ struct FloorPlanData {
             let element = FloorPlanElement(
                 rect: rectFrom(object: object),
                 rotation: rotationFrom(transform: object.transform),
-                type: .object(category: object.category),
+                type: .object(category: String(describing: object.category)),
                 label: labelFor(category: object.category)
             )
             elements.append(element)
@@ -650,8 +708,8 @@ class FloorPlanView: UIView, UIGestureRecognizerDelegate {
         context.setLineDash(phase: 0, lengths: [])
     }
 
-    private func drawObject(rect: CGRect, category: CapturedRoom.Object.Category, label: String?, in context: CGContext) {
-        let color = colorFor(category: category)
+    private func drawObject(rect: CGRect, category: String, label: String?, in context: CGContext) {
+        let color = colorFor(categoryString: category)
         context.setFillColor(color.withAlphaComponent(0.3).cgColor)
         context.setStrokeColor(color.cgColor)
         context.setLineWidth(1.5)
@@ -691,6 +749,28 @@ class FloorPlanView: UIView, UIGestureRecognizerDelegate {
         case .stairs:
             return .systemYellow
         @unknown default:
+            return FloorPlanConfig.objectColor
+        }
+    }
+
+    private func colorFor(categoryString: String) -> UIColor {
+        switch categoryString.lowercased() {
+        case let s where s.contains("bed"), let s where s.contains("sofa"), let s where s.contains("chair"):
+            return .systemPurple
+        case let s where s.contains("table"):
+            return .systemBrown
+        case let s where s.contains("storage"), let s where s.contains("refrigerator"), let s where s.contains("stove"),
+             let s where s.contains("oven"), let s where s.contains("dishwasher"), let s where s.contains("washer"):
+            return .systemGray
+        case let s where s.contains("sink"), let s where s.contains("toilet"), let s where s.contains("bathtub"):
+            return .systemCyan
+        case let s where s.contains("television"):
+            return .systemIndigo
+        case let s where s.contains("fireplace"):
+            return .systemOrange
+        case let s where s.contains("stairs"):
+            return .systemYellow
+        default:
             return FloorPlanConfig.objectColor
         }
     }

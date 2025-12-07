@@ -34,6 +34,9 @@
 		CC000001DEADBEEF00000011 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000011 /* HomeViewController.swift */; };
 		CC000001DEADBEEF00000012 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000012 /* HelpViewController.swift */; };
 		CC000001DEADBEEF00000013 /* RoomViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000013 /* RoomViewerViewController.swift */; };
+		CC000001DEADBEEF00000014 /* LocalizationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002DEADBEEF00000014 /* LocalizationHelper.swift */; };
+		CC000001DEADBEEF00000015 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CC000003DEADBEEF00000015 /* Localizable.strings */; };
+		CC000001DEADBEEF00000016 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CC000003DEADBEEF00000016 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +91,21 @@
 		CC000002DEADBEEF00000011 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000012 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		CC000002DEADBEEF00000013 /* RoomViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewerViewController.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000014 /* LocalizationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationHelper.swift; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000015 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000016 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000017 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000018 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000019 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000001A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000001B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000001C /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000001D /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000001E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF0000001F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000020 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000021 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CC000002DEADBEEF00000022 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -179,6 +197,9 @@
 				CC000002DEADBEEF0000000E /* SettingsViewController.swift */,
 				CC000002DEADBEEF0000000F /* FloorPlanExporter.swift */,
 				CC000002DEADBEEF00000010 /* Secrets.swift */,
+				CC000002DEADBEEF00000014 /* LocalizationHelper.swift */,
+				CC000003DEADBEEF00000015 /* Localizable.strings */,
+				CC000003DEADBEEF00000016 /* InfoPlist.strings */,
 				ACEF94B62820AD2300776A9D /* Main.storyboard */,
 				71B6638328D0CABC00635A15 /* UnsupportedDevice.storyboard */,
 				ACEF94B92820AD2400776A9D /* Assets.xcassets */,
@@ -293,6 +314,12 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
+				ru,
+				de,
+				fr,
+				es,
+				"pt-BR",
 			);
 			mainGroup = ACEF94A42820AD2300776A9D;
 			productRefGroup = ACEF94AE2820AD2300776A9D /* Products */;
@@ -329,6 +356,8 @@
 				213F69B22A128836000BE6B0 /* LaunchScreen.storyboard in Resources */,
 				ACEF94BA2820AD2400776A9D /* Assets.xcassets in Resources */,
 				ACEF94B82820AD2300776A9D /* Main.storyboard in Resources */,
+				CC000001DEADBEEF00000015 /* Localizable.strings in Resources */,
+				CC000001DEADBEEF00000016 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +405,7 @@
 				CC000001DEADBEEF00000011 /* HomeViewController.swift in Sources */,
 				CC000001DEADBEEF00000012 /* HelpViewController.swift in Sources */,
 				CC000001DEADBEEF00000013 /* RoomViewerViewController.swift in Sources */,
+				CC000001DEADBEEF00000014 /* LocalizationHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +447,34 @@
 				ACEF94B72820AD2300776A9D /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		CC000003DEADBEEF00000015 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CC000002DEADBEEF00000015 /* en */,
+				CC000002DEADBEEF00000016 /* zh-Hans */,
+				CC000002DEADBEEF00000019 /* ru */,
+				CC000002DEADBEEF0000001A /* de */,
+				CC000002DEADBEEF0000001B /* fr */,
+				CC000002DEADBEEF0000001C /* es */,
+				CC000002DEADBEEF0000001D /* pt-BR */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		CC000003DEADBEEF00000016 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CC000002DEADBEEF00000017 /* en */,
+				CC000002DEADBEEF00000018 /* zh-Hans */,
+				CC000002DEADBEEF0000001E /* ru */,
+				CC000002DEADBEEF0000001F /* de */,
+				CC000002DEADBEEF00000020 /* fr */,
+				CC000002DEADBEEF00000021 /* es */,
+				CC000002DEADBEEF00000022 /* pt-BR */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

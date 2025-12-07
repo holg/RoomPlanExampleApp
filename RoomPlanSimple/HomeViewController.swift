@@ -53,7 +53,7 @@ class HomeViewController: UIViewController {
 
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        title = "RoomPlan"
+        title = L10n.Home.title.localized
 
         setupNavigationBar()
         setupScrollView()
@@ -98,7 +98,7 @@ class HomeViewController: UIViewController {
     }
 
     private func setupHeader() {
-        headerLabel.text = "3D Room Scanner"
+        headerLabel.text = L10n.Home.header.localized
         headerLabel.font = .systemFont(ofSize: 28, weight: .bold)
         headerLabel.textAlignment = .center
         contentStack.addArrangedSubview(headerLabel)
@@ -113,8 +113,8 @@ class HomeViewController: UIViewController {
         // New Scan Button
         configureButton(
             newScanButton,
-            title: "Start New Scan",
-            subtitle: "Scan a room with LiDAR",
+            title: L10n.Home.NewScan.title.localized,
+            subtitle: L10n.Home.NewScan.subtitle.localized,
             icon: "cube.transparent.fill",
             backgroundColor: .systemBlue
         )
@@ -123,8 +123,8 @@ class HomeViewController: UIViewController {
         // Saved Rooms Button
         configureButton(
             savedRoomsButton,
-            title: "Saved Rooms",
-            subtitle: "View and manage your scans",
+            title: L10n.Home.SavedRooms.title.localized,
+            subtitle: L10n.Home.SavedRooms.subtitle.localized,
             icon: "square.stack.3d.up.fill",
             backgroundColor: .systemGreen
         )
@@ -133,8 +133,8 @@ class HomeViewController: UIViewController {
         // Help Button
         configureButton(
             helpButton,
-            title: "Help & Features",
-            subtitle: "Learn what you can do",
+            title: L10n.Home.Help.title.localized,
+            subtitle: L10n.Home.Help.subtitle.localized,
             icon: "questionmark.circle.fill",
             backgroundColor: .systemOrange
         )
@@ -172,7 +172,7 @@ class HomeViewController: UIViewController {
     }
 
     private func setupRecentScans() {
-        recentScansLabel.text = "Recent Scans"
+        recentScansLabel.text = L10n.Home.recentScans.localized
         recentScansLabel.font = .systemFont(ofSize: 22, weight: .semibold)
         contentStack.addArrangedSubview(recentScansLabel)
 
@@ -180,7 +180,7 @@ class HomeViewController: UIViewController {
         recentScansStack.spacing = 12
         contentStack.addArrangedSubview(recentScansStack)
 
-        emptyStateLabel.text = "No saved scans yet.\nStart your first scan above!"
+        emptyStateLabel.text = L10n.Home.emptyState.localized
         emptyStateLabel.font = .systemFont(ofSize: 16)
         emptyStateLabel.textColor = .secondaryLabel
         emptyStateLabel.textAlignment = .center
@@ -190,7 +190,7 @@ class HomeViewController: UIViewController {
     }
 
     private func setupFeatures() {
-        featuresLabel.text = "Features"
+        featuresLabel.text = L10n.Home.features.localized
         featuresLabel.font = .systemFont(ofSize: 22, weight: .semibold)
         contentStack.addArrangedSubview(featuresLabel)
 
@@ -198,11 +198,11 @@ class HomeViewController: UIViewController {
         featuresStack.spacing = 12
 
         let features = [
-            ("cube.transparent", "3D Room Capture", "LiDAR-powered room scanning"),
-            ("wifi", "WiFi Heatmap", "Track signal strength throughout the room"),
-            ("camera.fill", "Photo Capture", "Take photos during scanning"),
-            ("square.and.arrow.up", "Multiple Exports", "USDZ, OBJ, STL, DXF, SVG formats"),
-            ("icloud.fill", "iCloud Sync", "Sync rooms across all your devices")
+            ("cube.transparent", L10n.Feature.capture3DTitle.localized, L10n.Feature.capture3DDescription.localized),
+            ("wifi", L10n.Feature.wifiHeatmapTitle.localized, L10n.Feature.wifiHeatmapDescription.localized),
+            ("camera.fill", L10n.Feature.photoCaptureTitle.localized, L10n.Feature.photoCaptureDescription.localized),
+            ("square.and.arrow.up", L10n.Feature.exportTitle.localized, L10n.Feature.exportDescription.localized),
+            ("icloud.fill", L10n.Feature.icloudTitle.localized, L10n.Feature.icloudDescription.localized)
         ]
 
         for (icon, title, description) in features {
@@ -290,7 +290,8 @@ class HomeViewController: UIViewController {
         // Update saved button title
         if savedRooms.count > 0 {
             var config = savedRoomsButton.configuration
-            config?.attributedSubtitle = AttributedString("\(savedRooms.count) saved \(savedRooms.count == 1 ? "room" : "rooms")")
+            let roomWord = savedRooms.count == 1 ? L10n.Home.SavedRooms.room.localized : L10n.Home.SavedRooms.rooms.localized
+            config?.attributedSubtitle = AttributedString(L10n.Home.SavedRooms.count.localized(savedRooms.count, roomWord))
             savedRoomsButton.configuration = config
         }
     }
@@ -346,7 +347,7 @@ class HomeViewController: UIViewController {
             newScanButton.isEnabled = false
             newScanButton.alpha = 0.5
             var config = newScanButton.configuration
-            config?.attributedSubtitle = AttributedString("Requires LiDAR scanner • View saved rooms instead")
+            config?.attributedSubtitle = AttributedString(L10n.Home.NewScan.noLidar.localized)
             newScanButton.configuration = config
 
             #if DEBUG
@@ -410,21 +411,21 @@ class HomeViewController: UIViewController {
 
     private func showUnsupportedDeviceAlert() {
         let alert = UIAlertController(
-            title: "Scanning Not Available",
-            message: "This device doesn't have a LiDAR scanner required for 3D room scanning.\n\nYou can still:\n• View saved rooms from other devices\n• Access rooms synced via iCloud\n• Browse 3D models and floor plans",
+            title: L10n.Alert.unsupportedDeviceTitle.localized,
+            message: L10n.Alert.unsupportedDeviceMessage.localized,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: L10n.Common.ok.localized, style: .default))
         present(alert, animated: true)
     }
 
     private func showError(message: String) {
         let alert = UIAlertController(
-            title: "Error",
+            title: L10n.Common.error.localized,
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: L10n.Common.ok.localized, style: .default))
         present(alert, animated: true)
     }
 }

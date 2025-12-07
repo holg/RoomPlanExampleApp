@@ -23,6 +23,7 @@ final class AppSettings {
         static let defaultExportFormat = "defaultExportFormat"
         static let showPhotosInFloorPlan = "showPhotosInFloorPlan"
         static let iCloudSyncEnabled = "iCloudSyncEnabled"
+        static let appLanguage = "appLanguage"
     }
 
     // MARK: - Settings Properties
@@ -83,6 +84,80 @@ final class AppSettings {
         }
     }
 
+    // MARK: - Language Settings
+
+    /// Supported languages
+    enum AppLanguage: String, CaseIterable {
+        case system = "system"
+        case english = "en"
+        case chinese = "zh-Hans"
+        case russian = "ru"
+        case german = "de"
+        case french = "fr"
+        case spanish = "es"
+        case portugueseBR = "pt-BR"
+
+        var displayName: String {
+            switch self {
+            case .system:
+                return "System Default".localized
+            case .english:
+                return "English"
+            case .chinese:
+                return "简体中文"
+            case .russian:
+                return "Русский"
+            case .german:
+                return "Deutsch"
+            case .french:
+                return "Français"
+            case .spanish:
+                return "Español"
+            case .portugueseBR:
+                return "Português (Brasil)"
+            }
+        }
+    }
+
+    /// Current app language preference
+    var appLanguage: AppLanguage {
+        get {
+            guard let rawValue = UserDefaults.standard.string(forKey: Keys.appLanguage),
+                  let language = AppLanguage(rawValue: rawValue) else {
+                return .system
+            }
+            return language
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: Keys.appLanguage)
+            applyLanguage(newValue)
+            NotificationCenter.default.post(name: .languageDidChange, object: nil)
+        }
+    }
+
+    /// Apply the language setting
+    private func applyLanguage(_ language: AppLanguage) {
+        switch language {
+        case .system:
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+        case .english:
+            UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
+        case .chinese:
+            UserDefaults.standard.set(["zh-Hans"], forKey: "AppleLanguages")
+        case .russian:
+            UserDefaults.standard.set(["ru"], forKey: "AppleLanguages")
+        case .german:
+            UserDefaults.standard.set(["de"], forKey: "AppleLanguages")
+        case .french:
+            UserDefaults.standard.set(["fr"], forKey: "AppleLanguages")
+        case .spanish:
+            UserDefaults.standard.set(["es"], forKey: "AppleLanguages")
+        case .portugueseBR:
+            UserDefaults.standard.set(["pt-BR"], forKey: "AppleLanguages")
+        }
+        UserDefaults.standard.synchronize()
+    }
+
     // MARK: - iCloud Availability
 
     /// Check if iCloud is available on this device
@@ -108,6 +183,7 @@ final class AppSettings {
         defaultExportFormat = "parametric"
         showPhotosInFloorPlan = false
         iCloudSyncEnabled = false
+        appLanguage = .system
     }
 }
 
@@ -116,4 +192,5 @@ final class AppSettings {
 extension Notification.Name {
     static let settingsDidChange = Notification.Name("settingsDidChange")
     static let iCloudSyncToggled = Notification.Name("iCloudSyncToggled")
+    static let languageDidChange = Notification.Name("languageDidChange")
 }

@@ -29,7 +29,12 @@ class RoomViewerViewController: UIViewController {
     private var floorPlanImage: UIImage?
 
     // UI Components
-    private let segmentedControl = UISegmentedControl(items: ["Floor Plan", "3D Model", "Photos", "WiFi"])
+    private let segmentedControl = UISegmentedControl(items: [
+        L10n.Viewer.Mode.floorPlan.localized,
+        L10n.Viewer.Mode.model3D.localized,
+        L10n.Viewer.Mode.photos.localized,
+        L10n.Viewer.Mode.wifi.localized
+    ])
     private let containerView = UIView()
 
 
@@ -130,7 +135,7 @@ class RoomViewerViewController: UIViewController {
 
     private func showFloorPlan() {
         guard let image = floorPlanImage else {
-            showMessage("Floor plan not available")
+            showMessage(L10n.Viewer.noFloorPlan.localized)
             return
         }
 
@@ -154,7 +159,7 @@ class RoomViewerViewController: UIViewController {
 
         // Add pinch gesture hint
         let hintLabel = UILabel()
-        hintLabel.text = "Pinch to zoom • Drag to pan"
+        hintLabel.text = L10n.Viewer.floorPlanHint.localized
         hintLabel.font = .systemFont(ofSize: 12)
         hintLabel.textColor = .secondaryLabel
         hintLabel.textAlignment = .center
@@ -202,7 +207,7 @@ class RoomViewerViewController: UIViewController {
 
         // Add instructions overlay
         let instructionsLabel = UILabel()
-        instructionsLabel.text = "Drag to rotate • Pinch to zoom • Two-finger drag to pan"
+        instructionsLabel.text = L10n.Viewer.model3DHint.localized
         instructionsLabel.font = .systemFont(ofSize: 12)
         instructionsLabel.textColor = .secondaryLabel
         instructionsLabel.textAlignment = .center
@@ -220,7 +225,7 @@ class RoomViewerViewController: UIViewController {
     private func showPhotos() {
         // TODO: Implement photos gallery
         let label = UILabel()
-        label.text = "Photos captured during scanning"
+        label.text = L10n.Viewer.photosPlaceholder.localized
         label.textAlignment = .center
         label.textColor = .secondaryLabel
         label.frame = containerView.bounds
@@ -238,9 +243,9 @@ class RoomViewerViewController: UIViewController {
 
     private func showWiFiHeatmap() {
         if wifiSamples.isEmpty {
-            showMessage("No WiFi data available for this scan")
+            showMessage(L10n.Viewer.noWifiData.localized)
         } else {
-            showMessage("WiFi heatmap: \(wifiSamples.count) samples collected")
+            showMessage(L10n.Viewer.wifiSamplesCount.localized(wifiSamples.count))
         }
     }
 
@@ -272,24 +277,36 @@ class RoomViewerViewController: UIViewController {
 
     @objc private func shareRoom() {
         let alert = UIAlertController(
-            title: "Share Room",
-            message: "Choose what to share",
+            title: L10n.Export.title.localized,
+            message: L10n.Export.chooseExport.localized,
             preferredStyle: .actionSheet
         )
 
-        alert.addAction(UIAlertAction(title: "3D Model (USDZ)", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: L10n.Export.usdz.localized, style: .default) { [weak self] _ in
             self?.shareUSDZ()
         })
 
-        alert.addAction(UIAlertAction(title: "Floor Plan (PNG)", style: .default) { [weak self] _ in
-            self?.shareFloorPlanPNG()
+        alert.addAction(UIAlertAction(title: L10n.Export.obj.localized, style: .default) { [weak self] _ in
+            self?.shareOBJ()
         })
 
-        alert.addAction(UIAlertAction(title: "Floor Plan (DXF)", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: L10n.Export.stl.localized, style: .default) { [weak self] _ in
+            self?.shareSTL()
+        })
+
+        alert.addAction(UIAlertAction(title: L10n.Export.dxf.localized, style: .default) { [weak self] _ in
             self?.shareFloorPlanDXF()
         })
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.Export.svg.localized, style: .default) { [weak self] _ in
+            self?.shareFloorPlanSVG()
+        })
+
+        alert.addAction(UIAlertAction(title: L10n.Export.png.localized, style: .default) { [weak self] _ in
+            self?.shareFloorPlanPNG()
+        })
+
+        alert.addAction(UIAlertAction(title: L10n.Common.cancel.localized, style: .cancel))
 
         if let popover = alert.popoverPresentationController {
             popover.barButtonItem = navigationItem.rightBarButtonItem
@@ -305,12 +322,35 @@ class RoomViewerViewController: UIViewController {
         present(activityVC, animated: true)
     }
 
-    private func shareFloorPlanPNG() {
-        // Implementation for sharing floor plan PNG
+    private func shareOBJ() {
+        // TODO: Implementation for sharing OBJ format
+        showMessage(L10n.Export.error.localized)
+    }
+
+    private func shareSTL() {
+        // TODO: Implementation for sharing STL format
+        showMessage(L10n.Export.error.localized)
     }
 
     private func shareFloorPlanDXF() {
-        // Implementation for sharing floor plan DXF
+        // TODO: Implementation for sharing floor plan DXF
+        showMessage(L10n.Export.error.localized)
+    }
+
+    private func shareFloorPlanSVG() {
+        // TODO: Implementation for sharing floor plan SVG
+        showMessage(L10n.Export.error.localized)
+    }
+
+    private func shareFloorPlanPNG() {
+        // TODO: Implementation for sharing floor plan PNG
+        guard let image = floorPlanImage else {
+            showMessage(L10n.Viewer.noFloorPlan.localized)
+            return
+        }
+        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        activityVC.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(activityVC, animated: true)
     }
 }
 

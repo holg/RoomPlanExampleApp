@@ -13,6 +13,14 @@ class SavedRoomsViewController: UIViewController {
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var savedRooms: [SavedRoom] = []
+    private var selectedRooms: Set<IndexPath> = []
+    private var isSelectMode = false
+
+    private lazy var toolbar: UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+        return toolbar
+    }()
 
     // MARK: - Lifecycle
 
@@ -29,7 +37,7 @@ class SavedRoomsViewController: UIViewController {
     // MARK: - Setup
 
     private func setupUI() {
-        title = "Saved Rooms"
+        title = L10n.SavedRooms.title.localized
         view.backgroundColor = .systemBackground
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -38,97 +46,285 @@ class SavedRoomsViewController: UIViewController {
             action: #selector(dismissView)
         )
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Delete All",
-            style: .plain,
-            target: self,
-            action: #selector(deleteAllRooms)
-        )
-        navigationItem.rightBarButtonItem?.tintColor = .systemRed
+        updateNavigationButtons()
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.allowsMultipleSelectionDuringEditing = true
         tableView.register(SavedRoomCell.self, forCellReuseIdentifier: SavedRoomCell.reuseIdentifier)
         view.addSubview(tableView)
+
+        view.addSubview(toolbar)
+        toolbar.isHidden = true
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            toolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+
+    private func updateNavigationButtons() {
+        if isSelectMode {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: L10n.Common.cancel.localized,
+                style: .plain,
+                target: self,
+                action: #selector(toggleSelectMode)
+            )
+        } else {
+            let selectButton = UIBarButtonItem(
+                title: L10n.Common.edit.localized,
+                style: .plain,
+                target: self,
+                action: #selector(toggleSelectMode)
+            )
+
+            navigationItem.rightBarButtonItem = selectButton
+            selectButton.isEnabled = !savedRooms.isEmpty
+        }
+    }
+
+    private func updateToolbar() {
+        let selectedCount = selectedRooms.count
+
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+
+        let countLabel = UILabel()
+        countLabel.text = L10n.SavedRooms.selectedCount.localized(selectedCount)
+        countLabel.font = .systemFont(ofSize: 14)
+        countLabel.textColor = .secondaryLabel
+        let countItem = UIBarButtonItem(customView: countLabel)
+
+        let deleteButton = UIBarButtonItem(
+            title: L10n.SavedRooms.deleteSelected.localized,
+            style: .plain,
+            target: self,
+            action: #selector(deleteSelectedRooms)
+        )
+        deleteButton.tintColor = .systemRed
+        deleteButton.isEnabled = selectedCount > 0
+
+        let exportButton = UIBarButtonItem(
+            title: L10n.SavedRooms.exportSelected.localized,
+            style: .plain,
+            target: self,
+            action: #selector(exportSelectedRooms)
+        )
+        exportButton.isEnabled = selectedCount > 0
+
+        toolbar.setItems([deleteButton, flexSpace, countItem, flexSpace, exportButton], animated: true)
     }
 
     private func loadSavedRooms() {
         savedRooms = RoomStorageManager.shared.getSavedRooms()
         tableView.reloadData()
-        navigationItem.rightBarButtonItem?.isEnabled = !savedRooms.isEmpty
+        updateNavigationButtons()
     }
 
     // MARK: - Actions
 
     @objc private func dismissView() {
-        dismiss(animated: true)
+        if isSelectMode {
+            toggleSelectMode()
+        } else {
+            dismiss(animated: true)
+        }
     }
 
-    @objc private func deleteAllRooms() {
+    @objc private func toggleSelectMode() {
+        isSelectMode.toggle()
+        selectedRooms.removeAll()
+
+        tableView.setEditing(isSelectMode, animated: true)
+        toolbar.isHidden = !isSelectMode
+
+        if isSelectMode {
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: toolbar.frame.height, right: 0)
+        } else {
+            tableView.contentInset = .zero
+        }
+
+        updateNavigationButtons()
+        updateToolbar()
+        tableView.reloadData()
+    }
+
+    @objc private func deleteSelectedRooms() {
+        guard !selectedRooms.isEmpty else { return }
+
+        let count = selectedRooms.count
         let alert = UIAlertController(
-            title: "Delete All Rooms?",
-            message: "This will permanently delete all \(savedRooms.count) saved room(s).",
+            title: L10n.SavedRooms.DeleteSelected.title.localized,
+            message: L10n.SavedRooms.DeleteSelected.message.localized(count),
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Delete All", style: .destructive) { [weak self] _ in
-            try? RoomStorageManager.shared.deleteAllRooms()
-            self?.loadSavedRooms()
+        alert.addAction(UIAlertAction(title: L10n.Common.cancel.localized, style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.Common.delete.localized, style: .destructive) { [weak self] _ in
+            self?.performBatchDelete()
         })
 
         present(alert, animated: true)
     }
 
+    private func performBatchDelete() {
+        let sortedIndexPaths = selectedRooms.sorted().reversed()
+
+        for indexPath in sortedIndexPaths {
+            let room = savedRooms[indexPath.row]
+            try? RoomStorageManager.shared.deleteRoom(room)
+            savedRooms.remove(at: indexPath.row)
+        }
+
+        tableView.deleteRows(at: Array(sortedIndexPaths), with: .automatic)
+        selectedRooms.removeAll()
+
+        if savedRooms.isEmpty {
+            toggleSelectMode()
+        } else {
+            updateToolbar()
+        }
+    }
+
+    @objc private func exportSelectedRooms() {
+        guard !selectedRooms.isEmpty else { return }
+
+        var itemsToExport: [Any] = []
+
+        for indexPath in selectedRooms {
+            let room = savedRooms[indexPath.row]
+
+            let usdzURL = RoomStorageManager.shared.getUsdzURL(for: room)
+            if FileManager.default.fileExists(atPath: usdzURL.path) {
+                itemsToExport.append(usdzURL)
+            }
+
+            if let floorPlanImage = RoomStorageManager.shared.getFloorPlanImage(for: room) {
+                itemsToExport.append(floorPlanImage)
+            }
+        }
+
+        guard !itemsToExport.isEmpty else {
+            showError(L10n.Export.error.localized)
+            return
+        }
+
+        shareItems(itemsToExport)
+    }
+
     private func showExportOptions(for room: SavedRoom) {
         let alert = UIAlertController(
             title: room.name,
-            message: "Choose what to export",
+            message: L10n.Export.chooseExport.localized,
             preferredStyle: .actionSheet
         )
 
-        // Export 3D Model
+        // Export USDZ (3D Model)
         let usdzURL = RoomStorageManager.shared.getUsdzURL(for: room)
         if FileManager.default.fileExists(atPath: usdzURL.path) {
-            alert.addAction(UIAlertAction(title: "Export 3D Model (USDZ)", style: .default) { [weak self] _ in
+            alert.addAction(UIAlertAction(title: L10n.Export.usdz.localized, style: .default) { [weak self] _ in
                 self?.shareItems([usdzURL])
             })
         }
 
-        // Export Floor Plan Image
+        // Export OBJ (3D Model)
+        if FileManager.default.fileExists(atPath: usdzURL.path) {
+            alert.addAction(UIAlertAction(title: L10n.Export.obj.localized, style: .default) { [weak self] _ in
+                self?.exportAndShare(room: room, format: .obj)
+            })
+        }
+
+        // Export STL (3D Print)
+        if FileManager.default.fileExists(atPath: usdzURL.path) {
+            alert.addAction(UIAlertAction(title: L10n.Export.stl.localized, style: .default) { [weak self] _ in
+                self?.exportAndShare(room: room, format: .stl)
+            })
+        }
+
+        // Export SVG (Floor Plan Vector)
+        if RoomStorageManager.shared.loadFloorPlanData(for: room) != nil {
+            alert.addAction(UIAlertAction(title: L10n.Export.svg.localized, style: .default) { [weak self] _ in
+                self?.exportAndShare(room: room, format: .svg)
+            })
+        }
+
+        // Export DXF (CAD Floor Plan)
+        if RoomStorageManager.shared.loadFloorPlanData(for: room) != nil {
+            alert.addAction(UIAlertAction(title: L10n.Export.dxf.localized, style: .default) { [weak self] _ in
+                self?.exportAndShare(room: room, format: .dxf)
+            })
+        }
+
+        // Export Floor Plan Image (PNG)
         if let floorPlanImage = RoomStorageManager.shared.getFloorPlanImage(for: room) {
-            alert.addAction(UIAlertAction(title: "Export Floor Plan Image", style: .default) { [weak self] _ in
+            alert.addAction(UIAlertAction(title: L10n.Export.png.localized, style: .default) { [weak self] _ in
                 self?.shareItems([floorPlanImage])
             })
         }
 
-        // Export Both
+        // Export Both USDZ + Floor Plan
         if FileManager.default.fileExists(atPath: usdzURL.path),
            let floorPlanImage = RoomStorageManager.shared.getFloorPlanImage(for: room) {
-            alert.addAction(UIAlertAction(title: "Export Both", style: .default) { [weak self] _ in
+            alert.addAction(UIAlertAction(title: L10n.Export.both.localized, style: .default) { [weak self] _ in
                 self?.shareItems([usdzURL, floorPlanImage])
             })
         }
 
         // View Floor Plan
         if room.hasFloorPlan {
-            alert.addAction(UIAlertAction(title: "View Floor Plan", style: .default) { [weak self] _ in
+            alert.addAction(UIAlertAction(title: L10n.FloorPlan.view.localized, style: .default) { [weak self] _ in
                 self?.showFloorPlanPreview(for: room)
             })
         }
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.Common.cancel.localized, style: .cancel))
 
         alert.popoverPresentationController?.sourceView = view
         present(alert, animated: true)
+    }
+
+    private enum ExportFormat {
+        case obj
+        case stl
+        case svg
+        case dxf
+    }
+
+    private func exportAndShare(room: SavedRoom, format: ExportFormat) {
+        // Show loading indicator
+        let loadingAlert = UIAlertController(title: L10n.Export.processing.localized, message: nil, preferredStyle: .alert)
+        present(loadingAlert, animated: true)
+
+        Task { @MainActor in
+            do {
+                let fileURL: URL
+                switch format {
+                case .obj:
+                    fileURL = try RoomStorageManager.shared.exportToOBJ(for: room)
+                case .stl:
+                    fileURL = try RoomStorageManager.shared.exportToSTL(for: room)
+                case .svg:
+                    fileURL = try RoomStorageManager.shared.exportToSVG(for: room)
+                case .dxf:
+                    fileURL = try RoomStorageManager.shared.exportToDXF(for: room)
+                }
+
+                loadingAlert.dismiss(animated: true) {
+                    self.shareItems([fileURL])
+                }
+            } catch {
+                loadingAlert.dismiss(animated: true) {
+                    self.showError(L10n.Export.error.localized)
+                }
+            }
+        }
     }
 
     private func shareItems(_ items: [Any]) {
@@ -139,7 +335,7 @@ class SavedRoomsViewController: UIViewController {
 
     private func showFloorPlanPreview(for room: SavedRoom) {
         guard let image = RoomStorageManager.shared.getFloorPlanImage(for: room) else {
-            showError("Floor plan image not found")
+            showError(L10n.FloorPlan.notFound.localized)
             return
         }
 
@@ -152,12 +348,12 @@ class SavedRoomsViewController: UIViewController {
         try? RoomStorageManager.shared.deleteRoom(room)
         savedRooms.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
-        navigationItem.rightBarButtonItem?.isEnabled = !savedRooms.isEmpty
+        updateNavigationButtons()
     }
 
     private func showError(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(title: L10n.Common.error.localized, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.Common.ok.localized, style: .default))
         present(alert, animated: true)
     }
 }
@@ -182,16 +378,30 @@ extension SavedRoomsViewController: UITableViewDataSource {
 extension SavedRoomsViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let room = savedRooms[indexPath.row]
-        let viewerVC = RoomViewerViewController(savedRoom: room)
-        let navController = UINavigationController(rootViewController: viewerVC)
-        navController.modalPresentationStyle = .fullScreen
-        present(navController, animated: true)
+        if isSelectMode {
+            selectedRooms.insert(indexPath)
+            updateToolbar()
+        } else {
+            tableView.deselectRow(at: indexPath, animated: true)
+            let room = savedRooms[indexPath.row]
+            let viewerVC = RoomViewerViewController(savedRoom: room)
+            let navController = UINavigationController(rootViewController: viewerVC)
+            navController.modalPresentationStyle = .fullScreen
+            present(navController, animated: true)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if isSelectMode {
+            selectedRooms.remove(indexPath)
+            updateToolbar()
+        }
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
+        guard !isSelectMode else { return nil }
+
+        let deleteAction = UIContextualAction(style: .destructive, title: L10n.Common.delete.localized) { [weak self] _, _, completion in
             guard let self = self else { return }
             self.deleteRoom(self.savedRooms[indexPath.row], at: indexPath)
             completion(true)

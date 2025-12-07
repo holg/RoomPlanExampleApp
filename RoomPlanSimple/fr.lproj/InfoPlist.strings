@@ -1,0 +1,13 @@
+/*
+  InfoPlist.strings (French)
+  RoomPlanSimple
+
+  Localized permission messages
+*/
+
+"NSCameraUsageDescription" = "Cette application nécessite l'accès à votre caméra pour utiliser le scanner LiDAR. Cela permet de créer un modèle de votre pièce à des fins de planification. Vos images de caméra et données LiDAR sont uniquement utilisées à cet effet et ne sont ni stockées ni partagées.";
+
+"NSLocationWhenInUseUsageDescription" = "L'accès à la localisation est requis pour suivre l'intensité du signal WiFi pendant le scan de pièce. Cela permet de cartographier la couverture WiFi dans tout l'espace scanné. Vos données de localisation sont uniquement utilisées localement et ne sont pas partagées.";
+
+"CFBundleDisplayName" = "RoomPlan";
+"CFBundleName" = "RoomPlanSimple";

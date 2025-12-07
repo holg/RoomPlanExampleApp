@@ -8,6 +8,7 @@ Manages saving and loading of scanned room data for later export.
 import Foundation
 import UIKit
 import RoomPlan
+import ModelIO
 
 /// Manages persistent storage of captured room scans
 @MainActor
@@ -80,6 +81,14 @@ final class RoomStorageManager {
         let floorPlanFileName = "\(id.uuidString)_floorplan.png"
         let floorPlanURL = savedRoomsDirectory.appendingPathComponent(floorPlanFileName)
         saveFloorPlanImage(for: room, to: floorPlanURL)
+
+        // Save floor plan data for SVG/DXF export
+        let floorPlanData = FloorPlanData.from(room)
+        let floorPlanDataFileName = "\(id.uuidString)_floorplan.json"
+        let floorPlanDataURL = savedRoomsDirectory.appendingPathComponent(floorPlanDataFileName)
+        if let data = try? encoder.encode(floorPlanData) {
+            try? data.write(to: floorPlanDataURL)
+        }
 
         // Save photos if photo manager provided
         if let photoManager = photoManager, photoManager.photoCount > 0 {
@@ -205,6 +214,102 @@ final class RoomStorageManager {
         guard let url = getFloorPlanURL(for: room),
               let data = try? Data(contentsOf: url) else { return nil }
         return UIImage(data: data)
+    }
+
+    /// Export saved room to OBJ format
+    func exportToOBJ(for room: SavedRoom) throws -> URL {
+        let usdzURL = getUsdzURL(for: room)
+        guard fileManager.fileExists(atPath: usdzURL.path) else {
+            throw NSError(domain: "RoomStorageManager", code: 1,
+                          userInfo: [NSLocalizedDescriptionKey: "USDZ file not found"])
+        }
+
+        let objFileName = "\(room.id.uuidString).obj"
+        let objURL = fileManager.temporaryDirectory.appendingPathComponent(objFileName)
+
+        // Clean up any existing file
+        try? fileManager.removeItem(at: objURL)
+
+        // Load USDZ with ModelIO
+        let asset = MDLAsset(url: usdzURL)
+
+        // Export to OBJ
+        try asset.export(to: objURL)
+
+        return objURL
+    }
+
+    /// Export saved room to STL format
+    func exportToSTL(for room: SavedRoom) throws -> URL {
+        let usdzURL = getUsdzURL(for: room)
+        guard fileManager.fileExists(atPath: usdzURL.path) else {
+            throw NSError(domain: "RoomStorageManager", code: 1,
+                          userInfo: [NSLocalizedDescriptionKey: "USDZ file not found"])
+        }
+
+        let stlFileName = "\(room.id.uuidString).stl"
+        let stlURL = fileManager.temporaryDirectory.appendingPathComponent(stlFileName)
+
+        // Clean up any existing file
+        try? fileManager.removeItem(at: stlURL)
+
+        // Load USDZ with ModelIO
+        let asset = MDLAsset(url: usdzURL)
+
+        // Export to STL
+        try asset.export(to: stlURL)
+
+        return stlURL
+    }
+
+    /// Load floor plan data for a saved room
+    func loadFloorPlanData(for room: SavedRoom) -> FloorPlanData? {
+        let dataURL = savedRoomsDirectory.appendingPathComponent("\(room.id.uuidString)_floorplan.json")
+        guard let data = try? Data(contentsOf: dataURL),
+              let floorPlanData = try? decoder.decode(FloorPlanData.self, from: data) else {
+            return nil
+        }
+        return floorPlanData
+    }
+
+    /// Export saved room floor plan to SVG format
+    func exportToSVG(for room: SavedRoom) throws -> URL {
+        guard let floorPlanData = loadFloorPlanData(for: room) else {
+            throw NSError(domain: "RoomStorageManager", code: 2,
+                          userInfo: [NSLocalizedDescriptionKey: "Floor plan data not found"])
+        }
+
+        let svgFileName = "\(room.id.uuidString).svg"
+        let svgURL = fileManager.temporaryDirectory.appendingPathComponent(svgFileName)
+
+        // Clean up any existing file
+        try? fileManager.removeItem(at: svgURL)
+
+        // Generate SVG
+        let svgContent = FloorPlanExporter.exportToSVG(data: floorPlanData, includeDimensions: true)
+        try svgContent.write(to: svgURL, atomically: true, encoding: .utf8)
+
+        return svgURL
+    }
+
+    /// Export saved room floor plan to DXF format
+    func exportToDXF(for room: SavedRoom) throws -> URL {
+        guard let floorPlanData = loadFloorPlanData(for: room) else {
+            throw NSError(domain: "RoomStorageManager", code: 2,
+                          userInfo: [NSLocalizedDescriptionKey: "Floor plan data not found"])
+        }
+
+        let dxfFileName = "\(room.id.uuidString).dxf"
+        let dxfURL = fileManager.temporaryDirectory.appendingPathComponent(dxfFileName)
+
+        // Clean up any existing file
+        try? fileManager.removeItem(at: dxfURL)
+
+        // Generate DXF
+        let dxfContent = FloorPlanExporter.exportToDXF(data: floorPlanData, includeDimensions: true)
+        try dxfContent.write(to: dxfURL, atomically: true, encoding: .utf8)
+
+        return dxfURL
     }
 
     /// Delete a saved room

@@ -14,13 +14,15 @@ class SettingsViewController: UITableViewController {
     private enum Section: Int, CaseIterable {
         case scanning
         case saving
+        case language
         case about
 
         var title: String {
             switch self {
-            case .scanning: return "Scanning"
-            case .saving: return "Saving"
-            case .about: return "About"
+            case .scanning: return L10n.Settings.scanning.localized
+            case .saving: return L10n.Settings.saving.localized
+            case .language: return L10n.Settings.language.localized
+            case .about: return L10n.Settings.about.localized
             }
         }
     }
@@ -32,6 +34,10 @@ class SettingsViewController: UITableViewController {
     private enum SavingRow: Int, CaseIterable {
         case autoSave
         case iCloudSync
+    }
+
+    private enum LanguageRow: Int, CaseIterable {
+        case appLanguage
     }
 
     private enum AboutRow: Int, CaseIterable {
@@ -47,7 +53,7 @@ class SettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Settings"
+        title = L10n.Settings.title.localized
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .done,
             target: self,
@@ -75,6 +81,7 @@ class SettingsViewController: UITableViewController {
         switch sectionType {
         case .scanning: return ScanningRow.allCases.count
         case .saving: return SavingRow.allCases.count
+        case .language: return LanguageRow.allCases.count
         case .about: return AboutRow.allCases.count
         }
     }
@@ -97,6 +104,10 @@ class SettingsViewController: UITableViewController {
             guard let row = SavingRow(rawValue: indexPath.row) else { return UITableViewCell() }
             return configureSavingCell(for: row, at: indexPath)
 
+        case .language:
+            guard let row = LanguageRow(rawValue: indexPath.row) else { return UITableViewCell() }
+            return configureLanguageCell(for: row, at: indexPath)
+
         case .about:
             guard let row = AboutRow(rawValue: indexPath.row) else { return UITableViewCell() }
             return configureAboutCell(for: row, at: indexPath)
@@ -110,8 +121,8 @@ class SettingsViewController: UITableViewController {
         case .defaultWifiTracking:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
             cell.configure(
-                title: "WiFi Tracking by Default",
-                subtitle: "Automatically enable WiFi signal tracking when starting a scan",
+                title: L10n.Settings.WiFiTracking.title.localized,
+                subtitle: L10n.Settings.WiFiTracking.subtitle.localized,
                 isOn: settings.defaultWifiTracking
             ) { [weak self] isOn in
                 self?.settings.defaultWifiTracking = isOn
@@ -125,8 +136,8 @@ class SettingsViewController: UITableViewController {
         case .autoSave:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
             cell.configure(
-                title: "Auto-Save Scans",
-                subtitle: "Automatically save completed scans to your library",
+                title: L10n.Settings.AutoSave.title.localized,
+                subtitle: L10n.Settings.AutoSave.subtitle.localized,
                 isOn: settings.autoSaveScans
             ) { [weak self] isOn in
                 self?.settings.autoSaveScans = isOn
@@ -137,12 +148,12 @@ class SettingsViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
             let subtitle: String
             if settings.isICloudAvailable {
-                subtitle = "Sync saved rooms across all your devices"
+                subtitle = L10n.Settings.ICloud.subtitle.localized
             } else {
-                subtitle = "iCloud is not available. Sign in to iCloud in Settings."
+                subtitle = L10n.Settings.ICloud.unavailable.localized
             }
             cell.configure(
-                title: "iCloud Sync",
+                title: L10n.Settings.ICloud.title.localized,
                 subtitle: subtitle,
                 isOn: settings.iCloudSyncEnabled
             ) { [weak self] isOn in
@@ -162,20 +173,33 @@ class SettingsViewController: UITableViewController {
         }
     }
 
+    private func configureLanguageCell(for row: LanguageRow, at indexPath: IndexPath) -> UITableViewCell {
+        switch row {
+        case .appLanguage:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            var content = cell.defaultContentConfiguration()
+            content.text = L10n.Settings.AppLanguage.title.localized
+            content.secondaryText = settings.appLanguage.displayName
+            cell.contentConfiguration = content
+            cell.accessoryType = .disclosureIndicator
+            return cell
+        }
+    }
+
     private func configureAboutCell(for row: AboutRow, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
 
         switch row {
         case .version:
-            content.text = "Version"
+            content.text = L10n.Settings.version.localized
             let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
             let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
             content.secondaryText = "\(version) (\(build))"
             cell.selectionStyle = .none
 
         case .resetSettings:
-            content.text = "Reset to Defaults"
+            content.text = L10n.Settings.reset.localized
             content.textProperties.color = .systemRed
             cell.selectionStyle = .default
         }
@@ -191,20 +215,29 @@ class SettingsViewController: UITableViewController {
 
         guard let section = Section(rawValue: indexPath.section) else { return }
 
-        if section == .about, let row = AboutRow(rawValue: indexPath.row), row == .resetSettings {
-            confirmResetSettings()
+        switch section {
+        case .language:
+            if let row = LanguageRow(rawValue: indexPath.row), row == .appLanguage {
+                showLanguagePicker()
+            }
+        case .about:
+            if let row = AboutRow(rawValue: indexPath.row), row == .resetSettings {
+                confirmResetSettings()
+            }
+        default:
+            break
         }
     }
 
     private func confirmResetSettings() {
         let alert = UIAlertController(
-            title: "Reset Settings",
-            message: "Are you sure you want to reset all settings to their defaults?",
+            title: L10n.Settings.ResetConfirm.title.localized,
+            message: L10n.Settings.ResetConfirm.message.localized,
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Reset", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: L10n.Common.cancel.localized, style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.Settings.ResetConfirm.reset.localized, style: .destructive) { [weak self] _ in
             self?.settings.resetToDefaults()
             self?.tableView.reloadData()
         })
@@ -214,11 +247,52 @@ class SettingsViewController: UITableViewController {
 
     private func showICloudNotAvailableAlert() {
         let alert = UIAlertController(
-            title: "iCloud Not Available",
-            message: "iCloud is not available on this device. Please sign in to iCloud in Settings to enable sync.",
+            title: L10n.Settings.ICloud.notAvailableTitle.localized,
+            message: L10n.Settings.ICloud.notAvailableMessage.localized,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: L10n.Common.ok.localized, style: .default))
+        present(alert, animated: true)
+    }
+
+    private func showLanguagePicker() {
+        let alert = UIAlertController(
+            title: L10n.Settings.AppLanguage.title.localized,
+            message: L10n.Settings.AppLanguage.subtitle.localized,
+            preferredStyle: .actionSheet
+        )
+
+        // Add all available languages using the enum
+        for language in AppSettings.AppLanguage.allCases {
+            alert.addAction(UIAlertAction(title: language.displayName, style: .default) { [weak self] _ in
+                self?.changeLanguage(to: language)
+            })
+        }
+
+        alert.addAction(UIAlertAction(title: L10n.Common.cancel.localized, style: .cancel))
+
+        // For iPad
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = tableView
+            popoverController.sourceRect = tableView.rectForRow(at: IndexPath(row: 0, section: Section.language.rawValue))
+        }
+
+        present(alert, animated: true)
+    }
+
+    private func changeLanguage(to language: AppSettings.AppLanguage) {
+        settings.appLanguage = language
+        tableView.reloadData()
+
+        // Show restart prompt
+        let alert = UIAlertController(
+            title: L10n.Settings.LanguageRestart.title.localized,
+            message: L10n.Settings.LanguageRestart.message.localized,
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: L10n.Common.ok.localized, style: .default))
+
         present(alert, animated: true)
     }
 }

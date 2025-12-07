@@ -1,0 +1,211 @@
+/*
+  Localizable.strings (Russian)
+  RoomPlanSimple
+*/
+
+// MARK: - Common
+"common.ok" = "ОК";
+"common.cancel" = "Отмена";
+"common.done" = "Готово";
+"common.save" = "Сохранить";
+"common.delete" = "Удалить";
+"common.edit" = "Изменить";
+"common.close" = "Закрыть";
+"common.share" = "Поделиться";
+"common.error" = "Ошибка";
+"common.success" = "Успех";
+"common.loading" = "Загрузка...";
+
+// MARK: - Home Screen
+"home.title" = "RoomPlan";
+"home.header" = "3D сканер комнат";
+"home.newScan.title" = "Новое сканирование";
+"home.newScan.subtitle" = "Сканировать комнату с LiDAR";
+"home.newScan.noLidar" = "Требуется LiDAR • Просмотр сохранённых комнат";
+"home.savedRooms.title" = "Сохранённые комнаты";
+"home.savedRooms.subtitle" = "Просмотр и управление сканами";
+"home.savedRooms.count" = "Сохранено: %d %@";
+"home.savedRooms.room" = "комната";
+"home.savedRooms.rooms" = "комнат";
+"home.help.title" = "Справка и функции";
+"home.help.subtitle" = "Узнайте возможности";
+"home.recentScans" = "Последние сканы";
+"home.emptyState" = "Нет сохранённых сканов.\nНачните первое сканирование!";
+"home.features" = "Возможности";
+
+// MARK: - Features List
+"feature.3dCapture.title" = "3D захват комнаты";
+"feature.3dCapture.description" = "Сканирование с LiDAR";
+"feature.wifiHeatmap.title" = "Карта WiFi";
+"feature.wifiHeatmap.description" = "Отслеживание силы сигнала";
+"feature.photoCapture.title" = "Фото";
+"feature.photoCapture.description" = "Съёмка во время сканирования";
+"feature.export.title" = "Экспорт";
+"feature.export.description" = "USDZ, OBJ, STL, DXF, SVG";
+"feature.icloud.title" = "Синхронизация iCloud";
+"feature.icloud.description" = "Доступ на всех устройствах";
+
+// MARK: - Scanning
+"scan.title" = "Сканирование";
+"scan.preparing" = "Подготовка камеры...";
+"scan.instructions" = "Наведите устройство на комнату и медленно перемещайтесь";
+"scan.wifiTracking" = "Отслеживание WiFi";
+"scan.photosTaken" = "Фото: %d";
+"scan.duration" = "Длительность: %@";
+"scan.done" = "Готово";
+"scan.cancel" = "Отмена";
+"scan.processing" = "Обработка...";
+"scan.saving" = "Сохранение...";
+"scan.autoSaved" = "Автосохранение";
+"scan.saveSuccess" = "Комната сохранена!";
+"scan.error.title" = "Ошибка сканирования";
+"scan.error.sessionFailed" = "Сбой сканирования";
+"scan.error.exportFailed" = "Ошибка экспорта";
+"scan.error.saveFailed" = "Ошибка сохранения";
+
+// MARK: - Saved Rooms
+"savedRooms.title" = "Сохранённые комнаты";
+"savedRooms.empty" = "Нет сохранённых комнат";
+"savedRooms.deleteConfirm.title" = "Удалить комнату?";
+"savedRooms.deleteConfirm.message" = "Удалить \"%@\"?";
+"savedRooms.deleteConfirm.delete" = "Удалить";
+"savedRooms.deleteSuccess" = "Комната удалена";
+"savedRooms.deleteError" = "Ошибка удаления";
+"savedRooms.deleteAll.title" = "Удалить все комнаты?";
+"savedRooms.deleteAll.message" = "Вы уверены, что хотите удалить все %d комнат? Это действие нельзя отменить.";
+"savedRooms.deleteAll.button" = "Удалить все";
+"savedRooms.walls" = "Стены: %d";
+"savedRooms.doors" = "Двери: %d";
+"savedRooms.windows" = "Окна: %d";
+"savedRooms.objects" = "Объекты: %d";
+"savedRooms.area" = "%.1f м²";
+"savedRooms.dimensions" = "%.1f × %.1f м";
+"savedRooms.selectRooms" = "Выбрать";
+"savedRooms.selectedCount" = "выбрано: %d";
+"savedRooms.deleteSelected" = "Удалить";
+"savedRooms.exportSelected" = "Экспорт";
+"savedRooms.deleteSelected.title" = "Удалить выбранные комнаты?";
+"savedRooms.deleteSelected.message" = "Это навсегда удалит %d выбранные комнаты.";
+
+// MARK: - Room Viewer
+"viewer.title" = "Детали комнаты";
+"viewer.mode.info" = "Инфо";
+"viewer.mode.3d" = "3D модель";
+"viewer.mode.floorPlan" = "План этажа";
+"viewer.mode.wifi" = "Карта WiFi";
+"viewer.mode.photos" = "Фото";
+"viewer.export" = "Экспорт";
+"viewer.noFloorPlan" = "План недоступен";
+"viewer.no3DModel" = "3D модель недоступна";
+"viewer.noWifiData" = "Нет данных WiFi для этого скана";
+"viewer.floorPlanHint" = "Сжимайте для масштаба • Тяните для перемещения";
+"viewer.model3DHint" = "Тяните для поворота • Сжимайте для масштаба • Два пальца для перемещения";
+"viewer.photosPlaceholder" = "Фото, сделанные во время сканирования";
+"viewer.wifiSamplesCount" = "Карта WiFi: собрано %d образцов";
+"viewer.info.name" = "Название";
+"viewer.info.date" = "Дата";
+"viewer.info.dimensions" = "Размеры";
+"viewer.info.area" = "Площадь";
+"viewer.info.walls" = "Стены";
+"viewer.info.doors" = "Двери";
+"viewer.info.windows" = "Окна";
+"viewer.info.objects" = "Объекты";
+
+// MARK: - Export
+"export.title" = "Экспорт комнаты";
+"export.format" = "Формат";
+"export.usdz" = "USDZ (3D модель)";
+"export.obj" = "OBJ (3D модель)";
+"export.stl" = "STL (3D печать)";
+"export.dxf" = "DXF (CAD план)";
+"export.svg" = "SVG (векторный план)";
+"export.png" = "PNG (изображение)";
+"export.chooseExport" = "Выберите экспорт";
+"export.floorPlanImage" = "Изображение плана этажа";
+"export.both" = "3D модель и план этажа";
+"export.processing" = "Экспорт...";
+"export.success" = "Экспорт завершён";
+"export.error" = "Ошибка экспорта";
+"export.share" = "Поделиться %@";
+
+// MARK: - Settings
+"settings.title" = "Настройки";
+"settings.scanning" = "Сканирование";
+"settings.saving" = "Сохранение";
+"settings.language" = "Язык";
+"settings.about" = "О программе";
+"settings.wifiTracking.title" = "WiFi по умолчанию";
+"settings.wifiTracking.subtitle" = "Автоматически включать отслеживание WiFi";
+"settings.autoSave.title" = "Автосохранение";
+"settings.autoSave.subtitle" = "Автоматически сохранять сканы";
+"settings.icloud.title" = "Синхронизация iCloud";
+"settings.icloud.subtitle" = "Синхронизировать комнаты на всех устройствах";
+"settings.icloud.unavailable" = "iCloud недоступен. Войдите в настройках.";
+"settings.icloud.notAvailable.title" = "iCloud недоступен";
+"settings.icloud.notAvailable.message" = "iCloud недоступен. Войдите в iCloud в настройках iOS.";
+"settings.appLanguage.title" = "Язык приложения";
+"settings.appLanguage.subtitle" = "Смена языка (требуется перезапуск)";
+"settings.appLanguage.systemDefault" = "Системный";
+"settings.version" = "Версия";
+"settings.reset" = "Сбросить настройки";
+"settings.reset.confirm.title" = "Сброс настроек";
+"settings.reset.confirm.message" = "Сбросить все настройки?";
+"settings.reset.confirm.reset" = "Сбросить";
+"settings.language.restart.title" = "Требуется перезапуск";
+"settings.language.restart.message" = "Перезапустите приложение для смены языка.";
+"settings.language.restart.restartNow" = "Перезапустить";
+
+// MARK: - Help
+"help.title" = "Справка";
+"help.gettingStarted" = "Начало работы";
+"help.icloudSetup" = "Настройка iCloud";
+"help.scanning" = "Сканирование";
+"help.viewing" = "Просмотр комнат";
+"help.exporting" = "Экспорт";
+"help.troubleshooting" = "Решение проблем";
+
+// MARK: - Alerts
+"alert.unsupportedDevice.title" = "Сканирование недоступно";
+"alert.unsupportedDevice.message" = "На этом устройстве нет LiDAR для 3D сканирования.\n\nВы можете:\n• Просматривать комнаты с других устройств\n• Использовать синхронизацию iCloud\n• Просматривать 3D модели и планы";
+"alert.scanningUnavailable" = "Невозможно начать сканирование";
+
+// MARK: - Permissions
+"NSCameraUsageDescription" = "Приложению требуется доступ к камере для использования LiDAR сканера. Это используется для создания модели вашей комнаты. Изображения и данные LiDAR используются только для этой цели и не сохраняются.";
+"NSLocationWhenInUseUsageDescription" = "Доступ к геолокации требуется для отслеживания силы сигнала WiFi во время сканирования. Это позволяет создать карту покрытия WiFi. Данные о местоположении используются только локально и не передаются.";
+
+// MARK: - Floor Plan
+"floorPlan.title" = "План этажа";
+"floorPlan.dimensions" = "Размеры";
+"floorPlan.measurements" = "Показать измерения";
+"floorPlan.view" = "Просмотр плана этажа";
+"floorPlan.notFound" = "План этажа не найден";
+"floorPlan.error" = "Ошибка создания плана";
+
+// MARK: - WiFi Heatmap
+"wifi.title" = "Карта WiFi";
+"wifi.signalStrength" = "Сила сигнала";
+"wifi.excellent" = "Отлично";
+"wifi.good" = "Хорошо";
+"wifi.fair" = "Удовлетворительно";
+"wifi.poor" = "Слабо";
+"wifi.noData" = "Нет данных WiFi";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Добро пожаловать в RoomPlan";
+"onboarding.feature1.title" = "Сканируйте комнаты в 3D";
+"onboarding.feature1.description" = "Используйте LiDAR для создания точных 3D моделей";
+"onboarding.feature2.title" = "Отслеживайте WiFi";
+"onboarding.feature2.description" = "Создавайте карты покрытия WiFi";
+"onboarding.feature3.title" = "Экспорт и обмен";
+"onboarding.feature3.description" = "Экспортируйте в различные форматы";
+"onboarding.getStarted" = "Начать";
+"onboarding.skip" = "Пропустить";
+
+// MARK: - Statistics
+"stats.empty" = "Пустой скан";
+"stats.wallCount" = "Количество стен";
+"stats.doorCount" = "Количество дверей";
+"stats.windowCount" = "Количество окон";
+"stats.objectCount" = "Количество объектов";
+"stats.floorArea" = "Площадь пола";
+"stats.roomDimensions" = "Размеры комнаты";
